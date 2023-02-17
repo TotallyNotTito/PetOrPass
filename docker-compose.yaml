@@ -9,9 +9,20 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=doggr
-      - POSTGRES_PASSWORD=doggr
-      - POSTGRES_DB=doggr
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=petorpass
+
+#SAMPLE nginx default configuration for deploying server
+#  nginx:
+#    container_name: server
+#    image: nginx:latest
+#    restart: always
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - server:/etc/nginx/
+
     #network_mode: host
 #  backend:
 #    container_name: backend
