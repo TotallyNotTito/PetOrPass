@@ -1,0 +1,68 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": [
+      "es2021"
+    ],
+    "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
+    "emitDecoratorMetadata": true,
+
+    /* Modules */
+    "module": "ESNext",                                     /* Specify what module code is generated. */
+    // "rootDir": "./",                                  /* Specify the root folder within your source files. */
+    "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
+    "baseUrl": "./src",                                  /* Specify the base directory to resolve non-relative module names. */
+    // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
+    "types": ["vitest/importMeta", "node"],                                      /* Specify type package names to be included without being referenced in a source file. */
+
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": false,                                 /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    "declarationMap": false,                              /* Create sourcemaps for d.ts files. */
+    "sourceMap": true,
+    "outDir": "./buildTypeorm/",
+    //"allowImportingTsExtensions": false,
+
+
+    // "noEmit": true,                                   /* Disable emitting files from a compilation. */
+    //"emitDeclarationOnly": true,                        /* Only output d.ts files and not JavaScript files. */
+
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+
+    // "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
+    // "alwaysStrict": true,                             /* Ensure 'use strict' is always emitted. */
+    // "noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
+    // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
+    // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "allowUnreachableCode": true,
+
+    "skipDefaultLibCheck": true,
+
+    "skipLibCheck": true
+
+  },
+  "exclude": [
+    "vite.config.ts",
+    "vitest.config.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"
+  ],
+}

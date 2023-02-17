@@ -1,0 +1,28 @@
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "name": "Doug"
+}
+
+###
+POST http://localhost:8080/NotFoundPage
+Content-Type: application/json
+
+{}
+
+> {%
+	client.test("Request executed successfully", function() {
+		client.assert(response.status === 404, "Response status is not 404");
+	});
+%}
+
+
+###
+GET http://localhost:8080/
+
+###
+
+GET http://localhost:8080/users/1245
+
+###

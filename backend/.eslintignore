@@ -1,0 +1,10 @@
+.env
+node_modules/
+test/**/*
+test/
+build/
+logs/
+buildTypeorm/
+buildDocs/
+docs/
+public/

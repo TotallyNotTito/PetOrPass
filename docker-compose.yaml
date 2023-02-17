@@ -1,0 +1,32 @@
+version: '3'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - "5432:5432" 
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=doggr
+      - POSTGRES_PASSWORD=doggr
+      - POSTGRES_DB=doggr
+    #network_mode: host
+#  backend:
+#    container_name: backend
+#    build: ./backend/
+#    restart: always
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      # Vite takes care of most of this for us, but it's good practice for other backends
+#      - VITE_DB_HOST=postgres
+#      - VITE_IP_ADDR=0.0.0.0
+#      - VITE_PORT=8080
+#      - VITE_LOGS_DIR=logs/
+#    depends_on: #This is a lie
+#      - postgres
+volumes:
+  db:
+    driver: local
