@@ -1,0 +1,5 @@
+/.idea/
+/backend/docs/
+/backend/buildDocs/
+/backend/buildTypeorm/
+/backend/build/
