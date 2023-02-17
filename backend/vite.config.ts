@@ -62,7 +62,7 @@ export default defineConfig({
 			// Optional, default: 'viteNodeApp'
 			// the name of named export of you app from the appPath file
 			// this has to match the last line in src/server.ts where we export our final app
-			exportName: "doggr",
+			exportName: "petorpass",
 
 			// Optional, default: 'esbuild', using swc for TypeORM support
 			tsCompiler: "swc",

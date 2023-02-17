@@ -39,7 +39,7 @@
     "migration:create": "Creates new migration for manual entry, used like > pnpm migration:create ./src/db/migrations/MyNewMigrationName.  Run typeorm:updateDatasource after this to update the datasource file.",
     "migrations:generate": "Auto-generates a new migration based on any entity changes you made to your JS files, used like > pnpm migration:generate ./src/db/migrations/IpHistoryAddMethod  Run typeorm:updateDatasource after this to update the datasource file.",
     "migration:revert": "Undoes the most recent migration, can be called multiple times in a row",
-    "seed": "Starts Doggr in seed mode (Create default database entries), used like > pnpm seed",
+    "seed": "Starts petorpass in seed mode (Create default database entries), used like > pnpm seed",
     "generateDocs": "Auto generates a doc site from JSDoc comments in your code after building"
   },
   "keywords": [],

@@ -26,7 +26,7 @@ COPY --from=build /app/node_modules/ ./node_modules/
 EXPOSE 8080
 
 WORKDIR /app/build
-# This can be overridden with `docker run -it doggr/backend /bin/sh
+# This can be overridden with `docker run -it petorpass/backend /bin/sh
 # Later will be removed, as this will be served by nginx
 CMD [ "http-server", "-p",  "8080", "." ]
 
