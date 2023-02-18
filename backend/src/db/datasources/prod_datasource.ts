@@ -1,7 +1,6 @@
 // import dotenv from "dotenv";
 // import {DataSource} from 'typeorm';
-// import {User} from "../models/user";
-// import {IPHistory} from "../models/ip_history";
+// import {Pet} from "../models/pet";
 // import {Initialize1676281754950} from "../migrations/1676281754950-Initialize.ts";
 //
 // dotenv.config();
@@ -19,8 +18,7 @@
 // 		database: env.VITE_DB_NAME,
 // 		// entities are used to tell TypeORM which tables to create in the database
 // 		entities: [
-// 			User,
-// 			IPHistory
+// 			Pet,
 // 		],
 // 		migrations: [
 // 			Initialize1676281754950
