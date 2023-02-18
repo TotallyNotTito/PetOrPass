@@ -1,0 +1,11 @@
+:root {
+    --primary-color: #BB2649;
+}
+
+.primary-color {
+    background-color: var(--primary-color);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
