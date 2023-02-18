@@ -2,8 +2,7 @@
 import "reflect-metadata";
 import fp from "fastify-plugin";
 import {DataSource, Repository} from "typeorm";
-import {User} from "../db/models/user";
-import {IPHistory} from "../db/models/ip_history";
+import {Pet} from "../db/models/pet";
 import {FastifyInstance, FastifyPluginOptions} from "fastify";
 import {AppDataSource} from "../db/datasources/dev_datasource";
 
@@ -15,18 +14,10 @@ declare module 'fastify' {
 	interface FastifyInstance {
 		db: DBConfigOpts
 	}
-
-	// interface FastifyRequest {
-	// 	myPluginProp: string
-	// }
-	// interface FastifyReply {
-	// 	myPluginProp: number
-	// }
 }
 
 interface DBConfigOpts {
-	user: Repository<User>,
-	ip: Repository<IPHistory>,
+	user: Repository<Pet>,
 	connection: DataSource,
 }
 
@@ -46,8 +37,7 @@ const DbPlugin = fp(async (app: FastifyInstance, options: FastifyPluginOptions, 
 	// app.db.user
 	app.decorate("db", {
 		connection: dataSourceConnection,
-		user: dataSourceConnection.getRepository(User),
-		ip: dataSourceConnection.getRepository(IPHistory)
+		user: dataSourceConnection.getRepository(Pet)
 	});
 
 	done();
