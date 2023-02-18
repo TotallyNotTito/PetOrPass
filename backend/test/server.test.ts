@@ -65,7 +65,7 @@ describe("Route testing", () => {
 			.toBeUndefined();
 	});
 
-	it("Creates a new user successfully", async () => {
+	it("Responds to user post creation properly", async () => {
 		const res = await app.inject({
 			method: "POST",
 			url: "/users",
@@ -86,6 +86,6 @@ describe("Route testing", () => {
 		// 0.0.0.0 => 7 min size
 		expect(ip_address.length)
 			.toBeGreaterThanOrEqual(7);
-	})
+	});
 });
 

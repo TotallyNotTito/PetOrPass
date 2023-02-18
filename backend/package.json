@@ -21,7 +21,8 @@
     "migration:generate": "pnpm buildJS && typeorm migration:generate -d buildTypeorm/db/datasources/dev_datasource.js",
     "migration:revert": "pnpm buildJS && typeorm migration:revert -d buildTypeorm/db/datasources/dev_datasource.js",
     "seed": "vite-node src/index.ts -- -seed",
-    "generateDocs": "pnpm jsdoc -r -d docs/ -c jsdoc.json src/"
+    "generateDocs": "pnpm jsdoc -r -d docs/ -c jsdoc.json src/",
+    "gitSync": "pnpm typeorm:drop && pnpm migration:run && pnpm seed"
   },
   "scriptsComments": {
     "dev": "Starts the development server using vite-plugin-node for rapid iteration.",
@@ -32,15 +33,16 @@
     "test:watch": "Runs the test suite on changes.",
     "typeorm": "Necessary for updateDatasource to function properly, as it expects a discrete script named typeorm",
     "buildJS": "Builds standard JS files via tsc-esm, which we use for typeorm CLI and migrations",
-    "typeorm:drop": "Resets typeorm's internal idea of your database's state as well as dropping all tables in the database if they exist.  Use with caution!",
-    "typeorm:sync": "Syncs database to current Models state, like synchronize: true in our datasources, but on-demand",
-    "typeorm:updateDatasource": "Updates the typeorm datasource file with the latest references to your models, migrations, etc. Run after migration:generate or migration:create",
+    "typeorm:drop": "pnpm buildJS && Resets typeorm's internal idea of your database's state as well as dropping all tables in the database if they exist.  Use with caution!",
+    "typeorm:sync": "pnpm buildJS && Syncs database to current Models state, like synchronize: true in our datasources, but on-demand",
+    "typeorm:updateDatasource": "pnpm buildJS && Updates the typeorm datasource file with the latest references to your models, migrations, etc. Run after migration:generate or migration:create",
     "migration:run": "Runs all pending migrations, use after typeorm:updateDatasource",
     "migration:create": "Creates new migration for manual entry, used like > pnpm migration:create ./src/db/migrations/MyNewMigrationName.  Run typeorm:updateDatasource after this to update the datasource file.",
     "migrations:generate": "Auto-generates a new migration based on any entity changes you made to your JS files, used like > pnpm migration:generate ./src/db/migrations/IpHistoryAddMethod  Run typeorm:updateDatasource after this to update the datasource file.",
     "migration:revert": "Undoes the most recent migration, can be called multiple times in a row",
     "seed": "Starts petorpass in seed mode (Create default database entries), used like > pnpm seed",
-    "generateDocs": "Auto generates a doc site from JSDoc comments in your code after building"
+    "generateDocs": "Auto generates a doc site from JSDoc comments in your code after building",
+    "gitSync": "Run this immediately after 'git pull' to update your local database to match the new commit"
   },
   "keywords": [],
   "author": "",

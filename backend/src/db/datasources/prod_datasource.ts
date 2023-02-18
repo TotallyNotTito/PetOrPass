@@ -2,7 +2,7 @@
 // import {DataSource} from 'typeorm';
 // import {User} from "../models/user";
 // import {IPHistory} from "../models/ip_history";
-// import {Initialize1676281754950} from "../migrations/1676281754950-Initialize";
+// import {Initialize1676281754950} from "../migrations/1676281754950-Initialize.ts";
 //
 // dotenv.config();
 //
