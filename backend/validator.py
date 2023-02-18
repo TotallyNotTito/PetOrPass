@@ -1,8 +1,8 @@
 import json
 from urllib.request import urlopen
 
-from authlib import JWTBearerTokenValidator
-from authlib import JsonWebKey
+from authlib.oauth2.rfc7523 import JWTBearerTokenValidator
+from authlib.jose.rfc7517.jwk import JsonWebKey
 
 
 class Auth0JWTBearerTokenValidator(JWTBearerTokenValidator):
