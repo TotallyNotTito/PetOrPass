@@ -7,10 +7,8 @@ import Fastify, {FastifyInstance} from "fastify";
 import path from "path";
 import {getDirName} from "./lib/helpers";
 import logger from "./lib/logger";
-import {doggr_routes} from "./routes";
+import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
-
-
 
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
@@ -38,7 +36,7 @@ export async function buildApp(useLogging: boolean) {
 
 		// Adds all of our Router's routes to the app
 		app.log.info("Registering routes");
-		await app.register(doggr_routes);
+		await app.register(pet_routes);
 
 		// Connects to postgres
 		app.log.info("Connecting to Database...");
@@ -47,7 +45,7 @@ export async function buildApp(useLogging: boolean) {
 		app.log.info("App built successfully.");
 	} catch (err) {
 		console.error(err);
-		process.exit(1);
+		await process.exit(1);
 	}
 
 	return app;
@@ -73,6 +71,3 @@ export async function listen(app: FastifyInstance) {
 		app.log.error(err);
 	}
 }
-
-
-

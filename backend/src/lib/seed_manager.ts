@@ -26,7 +26,7 @@ class SeedMgr {
 	async seedAll(app: FastifyInstance, options: SeederOptionsType) {
 		// Go through every seeder included in our options (See index.ts)
 		for (let i = 0; i < options.seeds.length; i++) {
-			// Runs each seeder's "run" method (See db/seeds/user_seeder.ts)
+			// Runs each seeder's "run" method (See db/seeds/pet_seeder.ts)
 			await options.seeds[i].run(app);
 		}
 	}

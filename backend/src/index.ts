@@ -4,8 +4,6 @@ import SeedManager from "./lib/seed_manager";
 import SeederOptions from "./db/seeds/seeder_options";
 import {getModeFromArgs, RunMode} from "./lib/helpers";
 
-
-
 /**
  * Constructs Fastify instance
  * @param {boolean} useLogging whether to log the server or not
@@ -13,7 +11,7 @@ import {getModeFromArgs, RunMode} from "./lib/helpers";
 const app = await buildApp(true);
 
 try {
-// Add some DIY seeding to doggr!
+// Add some DIY seeding to pet or pass!
 	switch (getModeFromArgs()) {
 		case RunMode.LISTEN: {
 			// Make our app start listening
@@ -37,5 +35,5 @@ try {
 	app.log.error(err);
 }
 
-// boilerplate - doggr here matches with vite.config.js::exportName
-export const doggr = app;
+// boilerplate - petorpass here matches with vite.config.js::exportName
+export const petorpass = app;

@@ -1,6 +1,5 @@
 /** @module SeedManager */
-import {UserSeed} from "./user_seeder";
-import {IPHistorySeed} from "./ip_history_seeder";
+import {PetSeed} from "./pet_seeder";
 import {Seeder} from "../../lib/seed_manager";
 
 export type SeederOptionsType = {
@@ -12,8 +11,7 @@ export type SeederOptionsType = {
  */
 const SeederOptions: any = {
 	seeds: [
-		UserSeed,
-		IPHistorySeed
+		PetSeed
 	]
 };
 
