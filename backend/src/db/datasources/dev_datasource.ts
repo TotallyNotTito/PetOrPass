@@ -2,7 +2,7 @@
 import dotenv from "dotenv";
 import {DataSource} from 'typeorm';
 import {Pet} from "../models/pet";
-import {Initialize1676782386323} from "../migrations/1676782386323-Initialize";
+import {Initialize1676862032034} from "../migrations/1676862032034-Initialize";
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ export const AppDataSource = new DataSource({
 		Pet,
 	],
 	migrations: [
-		Initialize1676782386323,
+		Initialize1676862032034,
 	],
 	// DANGER DANGER our convenience will nuke production data!
 	synchronize: false

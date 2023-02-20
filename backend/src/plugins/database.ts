@@ -16,7 +16,7 @@ declare module 'fastify' {
 }
 
 interface DBConfigOpts {
-	user: Repository<Pet>,
+	pet: Repository<Pet>,
 	connection: DataSource,
 }
 
@@ -36,7 +36,7 @@ const DbPlugin = fp(async (app: FastifyInstance, options: FastifyPluginOptions, 
 	// app.db.user
 	app.decorate("db", {
 		connection: dataSourceConnection,
-		user: dataSourceConnection.getRepository(Pet)
+		pet: dataSourceConnection.getRepository(Pet)
 	});
 
 	done();
