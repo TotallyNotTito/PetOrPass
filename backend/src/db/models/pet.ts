@@ -15,6 +15,11 @@ export class Pet extends BaseEntity {
     @Column('text')
     pet_name: string;
 
+    // Field to store the pet's image name
+    // Image file stored separately in MinIO file storage
+    @Column('text')
+    image_name: string;
+
     // Field to store the cumulative score of a pet
     // This field can be used with the total_votes field to calculate a pet's average score
     // Example: If a pet receives two scores of 10, then this field will hold a value of 20
