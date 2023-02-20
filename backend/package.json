@@ -49,6 +49,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/middie": "^8.1.0",
+    "@fastify/multipart": "^7.4.1",
     "@fastify/static": "^6.8.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
