@@ -18,6 +18,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * Root route to serve landing page of app
 	 * @name get/root
 	 * @function
+	 * @returns {FastifyReply} TODO: Return description will be included after implementing react app
 	 */
 	app.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder static html file until we implement and serve react front end
@@ -29,6 +30,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * Route to redirect to the authentication microservice and log in user
 	 * @name get/login
 	 * @function
+	 * @returns {FastifyReply} TODO: Return description will be included after implementing authentication
 	 */
 	app.get("/login", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder reply until authentication microservice implemented
@@ -40,6 +42,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * Route to redirect to the authentication microservice and log out user
 	 * @name get/logout
 	 * @function
+	 * @returns {FastifyReply} TODO: Return description will be included after implementing authentication
 	 */
 	app.get("/logout", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder reply until authentication microservice implemented
@@ -51,21 +54,22 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * Route to create new pet details in database and store pet image in file storage
 	 * @name post/pet
 	 * @function
-	 * @param {string} pet_name - name of submitted pet
-	 * @param {image file} image_file - image of submitted pet
-	 * @param {string} submitted_by - auth ID of user that submitted pet
+	 * @param {string} petName - name of submitted pet
+	 * @param {image file} imageFile - image of submitted pet
+	 * @param {string} submittedBy - auth ID of user that submitted pet
+	 * @returns {FastifyReply} 201 status code to indicate that the submitted pet was successfully stored
 	 */
 	app.post("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
-		const {pet_name, submitted_by} = req.body;
-		const image_data = await request.file();
-		const image_name = `${faker.animal.type()}${faker.datatype.uuid()}.${data.mimetype}`;
+		const {petName, submittedBy} = req.body;
+		const imageData = await request.file();
+		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${data.mimetype}`;
 
 		const pet = new Pet();
-		pet.pet_name = pet_name;
-		pet.image_name = image_name;
+		pet.pet_name = petName;
+		pet.image_name = imageName;
 		pet.total_score = 0;
 		pet.total_votes = 0;
-		pet.submitted_by = submitted_by;
+		pet.submitted_by = submittedBy;
 		await pet.save();
 
 		// TODO: Pet image will be saved to MinIO file storage with new name once file storage implemented
@@ -74,8 +78,43 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		await reply.send();
 	});
 
+	/**
+	 * Route to retrieve a random pet to display for rating
+	 * @name get/pet
+	 * @function
+	 * @returns {FastifyReply} details of a randomly selected pet to be displayed to the user
+	 */
+	app.get("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
+		let statusCode = 200;
 
+		const pet = await app.db.pet.findOneByOrFail({}).catch((err) => {
+			// TODO: UI needed to display simple error message when database is empty
+			statusCode = 404;
+			{error: err};
+		});
 
+		reply.code(statusCode)
+		await reply.send(JSON.stringify(pet));
+	});
+
+	// /**
+	//  * Route to create new pet details in database and store pet image in file storage
+	//  * @name get/pet-score
+	//  * @function
+	//  * @param {number} pet_id - name of submitted pet
+	//  */
+	// app.get("/pet-score", async (request: FastifyRequest, reply: FastifyReply) => {
+	//
+	// });
+	//
+	// /**
+	//  * Route to create new pet details in database and store pet image in file storage
+	//  * @name get/pets
+	//  * @function
+	//  */
+	// app.get("/pets", async (request: FastifyRequest, reply: FastifyReply) => {
+	//
+	// });
 
 	/**
 	 * Route replying to /test path for test-testing
