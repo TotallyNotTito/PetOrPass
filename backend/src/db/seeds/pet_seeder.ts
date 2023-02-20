@@ -26,6 +26,7 @@ export class PetSeeder extends Seeder {
 		for (let i = 0; i < 10; i++) {
 			let pet = new Pet();
 			pet.pet_name = faker.name.firstName();
+			pet.image_name = `${faker.animal.type()}${faker.datatype.uuid()}.jpg`;
 			pet.total_score = Math.floor(Math.random() * 91) + 10;
 			pet.total_votes = Math.floor(Math.random() * 10) + 1;
 			pet.submitted_by = `fake_auth_id_${Math.floor(Math.random() * 5) + 1}`;
