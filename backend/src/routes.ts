@@ -19,12 +19,32 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 */
 	app.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
-		reply.code(200)
 		// TODO: This is a placeholder static html file until we implement and serve react front end
+		reply.code(200);
 		await reply.sendFile("index.html");
 	});
 
+	/**
+	 * Route to redirect to the authentication microservice and log in user
+	 * @name get/login
+	 * @function
+	 */
+	app.get("/login", async (request: FastifyRequest, reply: FastifyReply) => {
+		// TODO: This is a placeholder reply until authentication microservice implemented
+		reply.code(200)
+		await reply.send("PLACEHOLDER for Login via Authentication Microservice");
+	});
 
+	/**
+	 * Route to redirect to the authentication microservice and log out user
+	 * @name get/logout
+	 * @function
+	 */
+	app.get("/logout", async (request: FastifyRequest, reply: FastifyReply) => {
+		// TODO: This is a placeholder reply until authentication microservice implemented
+		reply.code(200)
+		await reply.send("PLACEHOLDER for Logout via Authentication Microservice");
+	});
 
 
 	/**
