@@ -9,3 +9,11 @@
 .navbar-brand {
     font-size: 2rem;
 }
+
+.card {
+    margin: 0 auto; 
+    float: none; 
+    margin-bottom: 10px; 
+    display: inline-flex;
+    vertical-align: center;
+}
