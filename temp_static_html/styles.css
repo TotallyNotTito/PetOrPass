@@ -11,12 +11,35 @@
 }
 
 .card {
-    margin: 0 auto; 
+    margin:50em; 
     float: none; 
-    min-height: 6rem;
-    max-height: 10rem;
-    margin-bottom: 4rem;
-    margin-top: 4rem; 
+    min-height: 15rem;
+    max-height: 25rem;
+    margin-bottom: 20rem;
+    margin-top: 10rem; 
     display: inline-flex;
     vertical-align: center;
 }
+
+.top {
+    margin-top: 7rem;
+    margin-bottom: auto;
+}
+
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--primary-color);
+}
+.h-custom {
+    height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+    .h-custom {
+    height: 100%;
+    }
+}
+
+
