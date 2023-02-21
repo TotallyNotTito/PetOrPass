@@ -13,7 +13,10 @@
 .card {
     margin: 0 auto; 
     float: none; 
-    margin-bottom: 10px; 
+    min-height: 6rem;
+    max-height: 10rem;
+    margin-bottom: 4rem;
+    margin-top: 4rem; 
     display: inline-flex;
     vertical-align: center;
 }
