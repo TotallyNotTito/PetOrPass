@@ -107,17 +107,28 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		await reply.send(JSON.stringify(pet));
 	});
 
+	/**
+	 * Route to update pet's score with new score submitted by user
+	 * @name put/pet-score
+	 * @function
+	 * @param {number} petId - name of pet that received user rating
+	 * @param {number} petRating - name of pet that received user rating
+	 */
+	app.put("/pet-score", async (request: any, reply: FastifyReply) => {
+		const {petId, petRating} = request.body;
+		const pet = await app.db.pet.findOne({where: {id: petId}});
 
-	// });
-	// /**
-	//  * Route to create new pet details in database and store pet image in file storage
-	//  * @name get/pet-score
-	//  * @function
-	//  * @param {number} pet_id - name of submitted pet
-	//  */
-	// app.put("/pet-score", async (request: FastifyRequest, reply: FastifyReply) => {
-	//
-	// });
+		pet.total_score += petRating;
+		pet.total_votes += 1;
+		pet.save();
+
+		const ratingResult = {avgScore: (pet.total_score / pet.total_votes).toFixed(2)};
+
+		reply.code(200);
+		await reply.send(JSON.stringify(ratingResult));
+	});
+
+
 	// /**
 	//  * Route to create new pet details in database and store pet image in file storage
 	//  * @name get/pets
