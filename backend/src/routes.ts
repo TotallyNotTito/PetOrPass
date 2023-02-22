@@ -4,6 +4,7 @@ import cors from "cors";
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
+import {formatImagePath} from "./lib/helpers";
 
 /**
  * App plugin where we construct our routes
@@ -85,13 +86,22 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @returns {FastifyReply} details of a randomly selected pet to be displayed to the user
 	 */
 	app.get("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
+		let pet;
 		let statusCode = 200;
+		const dbResult = await app.db.pet.createQueryBuilder('pet').select().orderBy("RANDOM()").getOne();
 
-		const pet = await app.db.pet.findOneByOrFail({}).catch((err) => {
-			// TODO: UI needed to display simple error message when database is empty
+		if (dbResult === null) {
 			statusCode = 404;
-			return {error: err};
-		});
+			pet = { error: "No pets have been added to the Pets table" };
+		} else {
+			pet = {
+				pet_name: dbResult.pet_name,
+				image_name: formatImagePath(dbResult.image_name),
+				total_score: dbResult.total_score,
+				total_votes: dbResult.total_votes,
+				submitted_by: dbResult.submitted_by
+			};
+		}
 
 		reply.code(statusCode);
 		await reply.send(JSON.stringify(pet));
