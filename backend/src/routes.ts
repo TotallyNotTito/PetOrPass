@@ -34,7 +34,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.get("/login", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder reply until authentication microservice implemented
-		reply.code(200)
+		reply.code(200);
 		await reply.send("PLACEHOLDER for Login via Authentication Microservice");
 	});
 
@@ -46,7 +46,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.get("/logout", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder reply until authentication microservice implemented
-		reply.code(200)
+		reply.code(200);
 		await reply.send("PLACEHOLDER for Logout via Authentication Microservice");
 	});
 
@@ -59,10 +59,10 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @param {string} submittedBy - auth ID of user that submitted pet
 	 * @returns {FastifyReply} 201 status code to indicate that the submitted pet was successfully stored
 	 */
-	app.post("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
-		const {petName, submittedBy} = req.body;
+	app.post("/pet", async (request: any, reply: FastifyReply) => {
+		const {petName, submittedBy} = request.body;
 		const imageData = await request.file();
-		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${data.mimetype}`;
+		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${imageData.mimetype}`;
 
 		const pet = new Pet();
 		pet.pet_name = petName;
@@ -74,7 +74,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 
 		// TODO: Pet image will be saved to MinIO file storage with new name once file storage implemented
 
-		reply.code(201)
+		reply.code(201);
 		await reply.send();
 	});
 
@@ -90,23 +90,24 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		const pet = await app.db.pet.findOneByOrFail({}).catch((err) => {
 			// TODO: UI needed to display simple error message when database is empty
 			statusCode = 404;
-			{error: err};
+			return {error: err};
 		});
 
-		reply.code(statusCode)
+		reply.code(statusCode);
 		await reply.send(JSON.stringify(pet));
 	});
 
+
+	// });
 	// /**
 	//  * Route to create new pet details in database and store pet image in file storage
 	//  * @name get/pet-score
 	//  * @function
 	//  * @param {number} pet_id - name of submitted pet
 	//  */
-	// app.get("/pet-score", async (request: FastifyRequest, reply: FastifyReply) => {
+	// app.put("/pet-score", async (request: FastifyRequest, reply: FastifyReply) => {
 	//
 	// });
-	//
 	// /**
 	//  * Route to create new pet details in database and store pet image in file storage
 	//  * @name get/pets
@@ -122,7 +123,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 */
 	app.get("/test", async (request: FastifyRequest, reply: FastifyReply) => {
-		reply.code(200)
+		reply.code(200);
 		await reply.send("GET Test");
 	});
 }
