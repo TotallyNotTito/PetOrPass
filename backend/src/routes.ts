@@ -86,14 +86,14 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @returns {FastifyReply} details of a randomly selected pet to be displayed to the user
 	 */
 	app.get("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
-		let pet;
-		let statusCode = 200;
+		let pet, statusCode;
 		const dbResult = await app.db.pet.createQueryBuilder('pet').select().orderBy("RANDOM()").getOne();
 
 		if (dbResult === null) {
 			statusCode = 404;
-			pet = { error: "No pets have been added to the Pets table" };
+			pet = {error: "No pets have been added to the Pets table"};
 		} else {
+			statusCode = 200
 			pet = {
 				pet_name: dbResult.pet_name,
 				image_name: formatImagePath(dbResult.image_name),
@@ -111,8 +111,9 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * Route to update pet's score with new score submitted by user
 	 * @name put/pet-score
 	 * @function
-	 * @param {number} petId - name of pet that received user rating
-	 * @param {number} petRating - name of pet that received user rating
+	 * @param {number} petId - id of pet that received user rating
+	 * @param {number} petRating - user rating received by pet
+	 * @returns {FastifyReply} details of a randomly selected pet to be displayed to the user
 	 */
 	app.put("/pet-score", async (request: any, reply: FastifyReply) => {
 		const {petId, petRating} = request.body;
@@ -128,15 +129,39 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		await reply.send(JSON.stringify(ratingResult));
 	});
 
+	/**
+	 * Route to retrieve list of all pets in Pets table that were submitted by a specific user
+	 * @name get/pets
+	 * @function
+	 * @param {string} submittedBy - auth ID of user who submitted pets
+	 * @returns {FastifyReply} list of all pets in Pets table that were submitted by a specific user
+	 */
+	app.get("/pets/:submittedBy", async (request: any, reply: FastifyReply) => {
+		const {submittedBy} = request.params;
+		const dbResult = await app.db.pet.find({where: {submitted_by: submittedBy}});
 
-	// /**
-	//  * Route to create new pet details in database and store pet image in file storage
-	//  * @name get/pets
-	//  * @function
-	//  */
-	// app.get("/pets", async (request: FastifyRequest, reply: FastifyReply) => {
-	//
-	// });
+		let pets = [];
+		dbResult.forEach((pet) => {
+			pets.push({
+				pet_name: pet.pet_name,
+				image_name: formatImagePath(pet.image_name),
+				total_score: pet.total_score,
+				total_votes: pet.total_votes,
+				submitted_by: pet.submitted_by
+			});
+		});
+
+		let statusCode;
+		if (pets.length === 0) {
+			statusCode = 404;
+			pets = {error: "No pets have been added to the Pets table by this user"};
+		} else {
+			statusCode = 200;
+		}
+
+		reply.code(statusCode);
+		await reply.send(JSON.stringify(pets));
+	});
 
 	/**
 	 * Route replying to /test path for test-testing
