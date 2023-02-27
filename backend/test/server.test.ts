@@ -67,50 +67,12 @@ describe("Route testing", () => {
 			.toBe(200);
 	});
 
+	it("Creates new pet in database and file storage", async () => {
 
 
-	// it("gets all users from users table pre-seed", async () => {
-	// 	const response = await app.inject({
-	// 		method: "GET",
-	// 		url: "/users",
-	// 	});
-	//
-	// 	expect(response.statusCode)
-	// 		.toBe(200);
-	// 	const data = JSON.parse(response.payload);
-	// 	expect(data)
-	// 		.toHaveLength(10);
-	// 	expect(data[0].name)
-	// 		.toEqual("user0");
-	// 	expect(data[3].name)
-	// 		.toEqual("user3");
-	// 	expect(data[9].name)
-	// 		.toEqual("user9");
-	// 	expect(data[10])
-	// 		.toBeUndefined();
-	// });
-	//
-	// it("Responds to user post creation properly", async () => {
-	// 	const res = await app.inject({
-	// 		method: "POST",
-	// 		url: "/users",
-	// 		payload: {
-	// 			name: "John",
-	// 			email: "john@email.com"
-	// 		}
-	// 	});
-	//
-	// 	let {user, ip_address} = JSON.parse(res.payload);
-	//
-	// 	expect(user.name)
-	// 		.toBe("John");
-	// 	expect(user.email)
-	// 		.toBe("john@email.com");
-	// 	expect(ip_address)
-	// 		.toBeDefined();
-	// 	// 0.0.0.0 => 7 min size
-	// 	expect(ip_address.length)
-	// 		.toBeGreaterThanOrEqual(7);
-	// });
+		// TODO: This is a placeholder test until MinIO file storage and frontend implemented
+
+		expect(true)
+			.toBe(true);
+	});
 });
-
