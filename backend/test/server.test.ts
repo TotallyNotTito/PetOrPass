@@ -67,6 +67,19 @@ describe("Route testing", () => {
 			.toBe(200);
 	});
 
+	it("retrieves random pet from database", async () => {
+		const petNames = ['Karianne', 'Brandon', 'Georgianna', 'Amalia', 'Leanne', 'Wilburn', 'Mae', 'Amelia', 'Tyra', 'Amparo']
+		const response = await app.inject({
+			method: "GET",
+			url: "/pet",
+		});
+
+		expect(response.statusCode)
+			.toBe(200);
+		const data = JSON.parse(response.payload);
+		expect(petNames).toContain(data.pet_name);
+	});
+
 	it("Creates new pet in database and file storage", async () => {
 
 

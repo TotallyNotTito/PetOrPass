@@ -31,7 +31,7 @@ export class PetSeeder extends Seeder {
 			pet.total_votes = Math.floor(Math.random() * 10) + 1;
 			pet.submitted_by = `fake_auth_id_${Math.floor(Math.random() * 5) + 1}`;
 			await pet.save();
-			app.log.info("Seeded user " + i);
+			app.log.info("Seeded pet " + i);
 		}
 	}
 }
