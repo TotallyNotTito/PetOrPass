@@ -113,7 +113,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 * @param {number} petId - id of pet that received user rating
 	 * @param {number} petRating - user rating received by pet
-	 * @returns {FastifyReply} details of a randomly selected pet to be displayed to the user
+	 * @returns {FastifyReply} updated average score for pet
 	 */
 	app.put("/pet-score", async (request: any, reply: FastifyReply) => {
 		const {petId, petRating} = request.body;
