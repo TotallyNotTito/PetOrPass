@@ -29,9 +29,9 @@ export class PetSeeder extends Seeder {
 			pet.image_name = `${faker.animal.type()}${faker.datatype.uuid()}.jpg`;
 			pet.total_score = Math.floor(Math.random() * 91) + 10;
 			pet.total_votes = Math.floor(Math.random() * 10) + 1;
-			pet.submitted_by = `fake_auth_id_${Math.floor(Math.random() * 5) + 1}`;
+			pet.submitted_by = `fake_auth_id_${faker.datatype.number({ min: 1, max: 5})}`;
 			await pet.save();
-			app.log.info("Seeded user " + i);
+			app.log.info("Seeded pet " + i);
 		}
 	}
 }

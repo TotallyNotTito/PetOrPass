@@ -3,6 +3,7 @@
 // This will let us use our basic middlewares now, then transition to hooks later
 import fastifyMiddie from "@fastify/middie";
 import staticFiles from "@fastify/static";
+import multipart from "@fastify/multipart";
 import Fastify, {FastifyInstance} from "fastify";
 import path from "path";
 import {getDirName} from "./lib/helpers";
@@ -27,6 +28,9 @@ export async function buildApp(useLogging: boolean) {
 	try {
 		// add express-like 'app.use' middleware support
 		await app.register(fastifyMiddie);
+
+		// add support for multipart content type
+		await app.register(multipart);
 
 		// add static file handling
 		await app.register(staticFiles, {
