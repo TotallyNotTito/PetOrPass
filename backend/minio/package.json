@@ -1,0 +1,21 @@
+{
+    "name": "minio",
+    "version": "0.0.1",
+    "description": "Bucket storage for Pet Images",
+    "main": "index.ts",
+
+    "keywords": [
+        "minio",
+        "minio-petorpass"
+    ],
+
+    "authors": [
+        "Kelsey Werner",
+        "Tito Reinhart"
+    ],
+
+    "license": "NA",
+    "dependencies": {
+        "minio": "^7.0.32"
+    }
+}
