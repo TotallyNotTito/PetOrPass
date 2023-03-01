@@ -12,6 +12,16 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=petorpass
+  minio:
+    container_name: storage_buckets
+    image: minio:latest
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./minio/data:/data
+    environment:
+      - MINIO_ROOT_USER=ROOT
+      - MINIO_ROOT_PASSWORD=PETME
 
 #SAMPLE nginx default configuration for deploying server
 #  nginx:
