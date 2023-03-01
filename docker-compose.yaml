@@ -12,6 +12,7 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=petorpass
+  
   minio:
     container_name: storage_buckets
     image: minio:latest
