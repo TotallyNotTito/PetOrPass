@@ -7,12 +7,17 @@ services:
     ports:
       - "5432:5432" 
     volumes:
-      - db:/var/lib/postgresql/data
+      - ./postgresql:/var/lib/postgresql
+      - ./postgresql/logs:/var/log/postgresql
+      - ./postgresql/initdb:/docker-entrypoint-initdb.d
+    networks:
+      - external_network
     environment:
+      -
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=password1234
+      - POSTGRES_ROOT_PASSWORD=password
       - POSTGRES_DB=petorpass
-  
   minio:
     container_name: storage_buckets
     image: minio:latest
