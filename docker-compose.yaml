@@ -23,6 +23,8 @@ services:
     environment:
       - MINIO_ROOT_USER=ROOT
       - MINIO_ROOT_PASSWORD=PETME
+    networks:
+      - external_network
 
 #SAMPLE nginx default configuration for deploying server
 #  nginx:
@@ -49,6 +51,5 @@ services:
 #      - VITE_LOGS_DIR=logs/
 #    depends_on: #This is a lie
 #      - postgres
-volumes:
-  db:
-    driver: local
+networks:
+  external_network:
