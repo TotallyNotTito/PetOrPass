@@ -1,5 +1,6 @@
 /** @module Routes */
 
+import cors from "cors";
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
@@ -10,6 +11,11 @@ import {formatImagePath} from "./lib/helpers";
  * @param {FastifyInstance} app our main Fastify app instance
  */
 export async function pet_routes(app: FastifyInstance): Promise<void> {
+
+	// Middleware
+	// TODO: Refactor this in favor of fastify-cors
+	app.use(cors());
+
 	/**
 	 * Root route to serve landing page of app
 	 * @name get/root
