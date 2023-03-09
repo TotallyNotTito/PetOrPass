@@ -3,7 +3,7 @@ import {Logout} from "./components/Logout";
 import {NavBar} from "./components/NavBar";
 import {RatePet} from "./components/RatePet";
 import {SubmitPetForm} from "./components/SubmitPetForm";
-import {PetGaller} from "./components/PetGallery";
+import {PetGallery} from "./components/PetGallery";
 
 export function PetOrPassRoutes() {
     return (
