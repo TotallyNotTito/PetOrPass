@@ -58,7 +58,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 * @param {string} petName - name of submitted pet
 	 * @param {image file} imageFile - image of submitted pet
-	 * @param {string} submittedBy - auth ID of user that submitted pet
+	 * @param {string} submittedBy - email address of user that submitted pet
 	 * @returns {FastifyReply} 201 status code to indicate that the submitted pet was successfully stored
 	 */
 	app.post("/pet", async (request: any, reply: FastifyReply) => {
@@ -140,7 +140,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * Route to retrieve list of all pets in Pets table that were submitted by a specific user
 	 * @name get/pets
 	 * @function
-	 * @param {string} submittedBy - auth ID of user who submitted pets
+	 * @param {string} submittedBy - email address of user who submitted pets
 	 * @returns {FastifyReply} list of all pets in Pets table that were submitted by a specific user
 	 */
 	app.get("/pets/:submittedBy", async (request: any, reply: FastifyReply) => {

@@ -101,7 +101,7 @@ describe("Route testing", () => {
 			`${fileStorageUrl}dog4bb0d9a0-fdf7-4280-921e-bf63050864f7.jpg`];
 		const response = await app.inject({
 			method: "GET",
-			url: "/pets/fake_auth_id_1"
+			url: "/pets/fake_email_address_1@test.com"
 		});
 
 		expect(response.statusCode)
@@ -115,7 +115,7 @@ describe("Route testing", () => {
 			expect(data[i].image_name)
 				.toEqual(imageNames[i]);
 			expect(data[i].submitted_by)
-				.toEqual('fake_auth_id_1');
+				.toEqual('fake_email_address_1@test.com');
 		}
 		expect(data[3])
 			.toBeUndefined();
