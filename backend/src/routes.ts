@@ -1,6 +1,5 @@
 /** @module Routes */
 
-import cors from "cors";
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
@@ -11,10 +10,6 @@ import {formatImagePath} from "./lib/helpers";
  * @param {FastifyInstance} app our main Fastify app instance
  */
 export async function pet_routes(app: FastifyInstance): Promise<void> {
-
-	// Middleware
-	app.use(cors());
-
 	/**
 	 * Root route to serve landing page of app
 	 * @name get/root
@@ -87,13 +82,16 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.get("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
 		let pet, statusCode;
-		const dbResult = await app.db.pet.createQueryBuilder('pet').select().orderBy("RANDOM()").getOne();
+		const dbResult = await app.db.pet.createQueryBuilder('pet')
+			.select()
+			.orderBy("RANDOM()")
+			.getOne();
 
 		if (dbResult === null) {
 			statusCode = 404;
 			pet = {error: "No pets have been added to the Pets table"};
 		} else {
-			statusCode = 200
+			statusCode = 200;
 			pet = {
 				pet_name: dbResult.pet_name,
 				image_name: formatImagePath(dbResult.image_name),
@@ -117,11 +115,14 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.put("/pet-score", async (request: any, reply: FastifyReply) => {
 		const {petId, petRating} = request.body;
-		const pet = await app.db.pet.findOne({where: {id: petId}});
+		// We do not explicitly handle the case where a petId does not exist in the database because
+		// 		this route can only be called on the front end by pets that are verified to exist as the
+		//			app does not offer the option to delete a pet
+		const pet = await app.db.pet.findOneOrFail({where: {id: petId}});
 
 		pet.total_score += petRating;
 		pet.total_votes += 1;
-		pet.save();
+		await pet.save();
 
 		const ratingResult = {avgScore: (pet.total_score / pet.total_votes).toFixed(2)};
 
@@ -140,7 +141,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		const {submittedBy} = request.params;
 		const dbResult = await app.db.pet.find({where: {submitted_by: submittedBy}});
 
-		let pets = [];
+		let pets:any[] = [];
 		dbResult.forEach((pet) => {
 			pets.push({
 				pet_name: pet.pet_name,
@@ -154,7 +155,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		let statusCode;
 		if (pets.length === 0) {
 			statusCode = 404;
-			pets = {error: "No pets have been added to the Pets table by this user"};
+			pets = [{error: 'No pets have been added to the Pets table by this user'}];
 		} else {
 			statusCode = 200;
 		}
