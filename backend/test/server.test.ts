@@ -3,6 +3,7 @@ import {afterAll, beforeAll, describe, expect, it} from "vitest";
 import {buildApp} from "../src/server";
 import SeedManager from "../src/lib/seed_manager";
 import SeederOptions from "../src/db/seeds/seeder_options";
+import {formatImagePath} from "../src/lib/helpers";
 
 // This is the app we'll use for testing, created at file-level scope
 let app;
@@ -69,17 +70,16 @@ describe("Route testing", () => {
 
 	it("retrieves random pet from database", async () => {
 		const petNames = ['Karianne', 'Celestino', 'Alfreda', 'Shayna', 'Francisco', 'Etha', 'Leonie', 'Mauricio', 'Kristofer', 'Miguel'];
-		const fileStorageUrl = 'http://PLACEHOLDER/my_bucket/';
-		const imageNames = [`${fileStorageUrl}cow4668d202-12a3-4d72-991e-938281034ffc.jpg`,
-			`${fileStorageUrl}catd44a6bfa-de54-4295-a084-ac2099796176.jpg`,
-			`${fileStorageUrl}cetaceane0fc08e6-98bf-4a29-90d3-18dcd4140d0f.jpg`,
-			`${fileStorageUrl}cow50915e5c-2c3a-4098-a699-1a523e8f69f6.jpg`,
-			`${fileStorageUrl}bird3c4b3d28-f0fe-495b-8541-e708a178ff76.jpg`,
-			`${fileStorageUrl}horsec2c258a0-844e-4165-b79a-145a53ea4c3c.jpg`,
-			`${fileStorageUrl}dog4bb0d9a0-fdf7-4280-921e-bf63050864f7.jpg`,
-			`${fileStorageUrl}crocodilia8ab78c0b-6b77-46b5-9887-a1549f707034.jpg`,
-			`${fileStorageUrl}cetaceanfbfdf51f-af86-427f-a33f-89f206931679.jpg`,
-			`${fileStorageUrl}lion784f917f-5b5d-43b7-87fe-4bfca6c57a1b.jpg`];
+		const imageNames = [formatImagePath("cow4668d202-12a3-4d72-991e-938281034ffc.jpg"),
+			formatImagePath("catd44a6bfa-de54-4295-a084-ac2099796176.jpg"),
+			formatImagePath("cetaceane0fc08e6-98bf-4a29-90d3-18dcd4140d0f.jpg"),
+			formatImagePath("bird3c4b3d28-f0fe-495b-8541-e708a178ff76.jpg"),
+			formatImagePath("horsec2c258a0-844e-4165-b79a-145a53ea4c3c.jpg"),
+			formatImagePath("dog4bb0d9a0-fdf7-4280-921e-bf63050864f7.jpg"),
+			formatImagePath("crocodilia8ab78c0b-6b77-46b5-9887-a1549f707034.jpg"),
+			formatImagePath("cow50915e5c-2c3a-4098-a699-1a523e8f69f6.jpg"),
+			formatImagePath("cetaceanfbfdf51f-af86-427f-a33f-89f206931679.jpg"),
+			formatImagePath("lion784f917f-5b5d-43b7-87fe-4bfca6c57a1b.jpg")];
 
 		const response = await app.inject({
 			method: "GET",
@@ -95,13 +95,12 @@ describe("Route testing", () => {
 
 	it("retrieves list of all pets submitted by a user", async () => {
 		const petNames = ['Karianne', 'Shayna', 'Leonie']
-		const fileStorageUrl = 'http://PLACEHOLDER/my_bucket/';
-		const imageNames = [`${fileStorageUrl}cow4668d202-12a3-4d72-991e-938281034ffc.jpg`,
-			`${fileStorageUrl}cow50915e5c-2c3a-4098-a699-1a523e8f69f6.jpg`,
-			`${fileStorageUrl}dog4bb0d9a0-fdf7-4280-921e-bf63050864f7.jpg`];
+		const imageNames = [formatImagePath("cow4668d202-12a3-4d72-991e-938281034ffc.jpg"),
+			formatImagePath("cow50915e5c-2c3a-4098-a699-1a523e8f69f6.jpg"),
+			formatImagePath("dog4bb0d9a0-fdf7-4280-921e-bf63050864f7.jpg")];
 		const response = await app.inject({
 			method: "GET",
-			url: "/pets/fake_auth_id_1"
+			url: "/pets/fake_email_address_1@test.com"
 		});
 
 		expect(response.statusCode)
@@ -115,7 +114,7 @@ describe("Route testing", () => {
 			expect(data[i].image_name)
 				.toEqual(imageNames[i]);
 			expect(data[i].submitted_by)
-				.toEqual('fake_auth_id_1');
+				.toEqual('fake_email_address_1@test.com');
 		}
 		expect(data[3])
 			.toBeUndefined();
@@ -142,7 +141,7 @@ describe("Route testing", () => {
 
 	it("Creates new pet in database and file storage", async () => {
 
-		// TODO: This is a placeholder test until MinIO file storage and frontend implemented
+		// TODO: This is a placeholder test for the POST /pet route until MinIO file storage and frontend implemented
 
 		expect(true)
 			.toBe(true);

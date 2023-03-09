@@ -32,7 +32,7 @@ export class Pet extends BaseEntity {
     @Column('integer')
     total_votes: number;
 
-    // Field to store the Auth0 ID for the user that submitted the pet
+    // Field to store the email address for the user that submitted the pet
     @Column('text')
     submitted_by: string;
 
