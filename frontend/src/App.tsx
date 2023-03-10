@@ -1,4 +1,3 @@
-import './App.css'
 import {PetOrPassRoutes} from "./Router";
 
 function App() {
