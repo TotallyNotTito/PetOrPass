@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask
+from flask import request, redirect
 import os
 
 load_dotenv() #take env variables from .env
