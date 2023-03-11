@@ -7,6 +7,7 @@ export function SubmitPetForm() {
     const onSubmitPet = (event) => {
         event.preventDefault();
         console.log(petName);
+        setPetName('');
     }
 
     return (
