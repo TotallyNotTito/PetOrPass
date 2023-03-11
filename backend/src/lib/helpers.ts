@@ -3,6 +3,17 @@ import {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
 /**
+ * Creates URL for accessing a pet image in MinIO file storage
+ * @function
+ * @param {string} imageName - image file name
+ * @returns {string} URL to access pet image
+ */
+export function formatImagePath(imageName: string) {
+	// 	TODO: replace placeholder url with real url once MinIO file storage implemented
+	return `http://PLACEHOLDER/my_bucket/${imageName}`;
+}
+
+/**
  * DIY __dirname since it's removed from ES Modules:
  * https://codingbeautydev.com/blog/javascript-dirname-is-not-defined-in-es-module-scope/
  * @function
