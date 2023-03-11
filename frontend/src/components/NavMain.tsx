@@ -17,7 +17,7 @@ function NavBar() {
     return (
         <nav className="navbar navbar-expand-md navbar-dark fixed-top mb-5 primary-color">
             <div className="container-fluid">
-                <a className="navbar-brand">Pet or Pass</a>
+                <div className="navbar-brand">Pet or Pass</div>
                 <button className="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
