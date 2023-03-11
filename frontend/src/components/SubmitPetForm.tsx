@@ -1,3 +1,3 @@
 export function SubmitPetForm() {
-    return (<div>SUBMIT PET FORM PAGE PLACEHOLDER</div>);
+    return (<div className="below-navbar">SUBMIT PET FORM PAGE PLACEHOLDER</div>);
 }

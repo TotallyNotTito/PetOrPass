@@ -1,3 +1,3 @@
 export function Logout() {
-    return (<div>LOGOUT PAGE PLACEHOLDER</div>);
+    return (<div className="below-navbar">LOGOUT PAGE PLACEHOLDER</div>);
 }
