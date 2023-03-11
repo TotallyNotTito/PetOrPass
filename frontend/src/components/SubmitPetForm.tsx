@@ -1,13 +1,19 @@
 import {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function SubmitPetForm() {
 
     let [petName, setPetName] = useState('');
+    let [petImage, setPetImage] = useState({});
+    let [resetImage, setResetImage] = useState('') 
 
     const onSubmitPet = (event) => {
         event.preventDefault();
         console.log(petName);
         setPetName('');
+        console.log(petImage)
+        setResetImage('')
+
     }
 
     return (
@@ -32,7 +38,13 @@ export function SubmitPetForm() {
             <div className="row mt-3 justify-content-center">
                 <div className="col-xl-4 col-md-6 col-sm-8 col-10">
                     <label className="form-label" htmlFor="petImageInput">Upload Pet Image</label>
-                    <input className="form-control" type="file" id="petImageInput" name="petImageInput" accept="image/*"/>
+                    <input className="form-control" 
+                           type="file" 
+                           id="petImageInput" 
+                           name="petImageInput" 
+                           accept="image/*"
+                           onChange={pi => setPetImage({'petImage':pi.target.files[0]})}
+                    />
                 </div>
             </div>
             <div className="row mt-5 justify-content-center">
