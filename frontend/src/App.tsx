@@ -1,8 +1,8 @@
-import {PetOrPassRoutes} from "./Router";
+import {NavMain} from "./components/NavMain";
 
 function App() {
     return (
-        <PetOrPassRoutes/>
+        <NavMain/>
     )
 }
 
