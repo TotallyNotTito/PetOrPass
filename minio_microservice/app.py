@@ -4,6 +4,17 @@ import os
 
 load_dotenv() #take env variables from .env
 
-port = os.environ.get('TEST_ENV') if os.environ.get('TEST_ENV') else None
+app = Flask(__name__)
+
+@app.route("/")
+def load_images():
+    test_dict = {'dog':'poodle'}
+    return test_dict
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT')))
+
+
+
 
 
