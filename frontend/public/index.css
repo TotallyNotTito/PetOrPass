@@ -1,1 +1,31 @@
-/*TODO: include css from static UI work*/
+:root {
+    --primary-color: #BB2649;
+}
+
+.primary-color {
+    background-color: var(--primary-color);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.below-navbar {
+    margin-top: 150px;
+}
+
+.button-color {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.button-color:hover {
+    background-color: white;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.card-width {
+    width: 18rem;
+}
