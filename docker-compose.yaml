@@ -55,5 +55,7 @@ services:
 #      - VITE_LOGS_DIR=logs/
 #    depends_on: #This is a lie
 #      - postgres
+
 networks:
   external_network:
+
