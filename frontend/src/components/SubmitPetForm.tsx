@@ -5,15 +5,12 @@ export function SubmitPetForm() {
 
     let [petName, setPetName] = useState('');
     let [petImage, setPetImage] = useState({});
-    let [resetImage, setResetImage] = useState('') 
 
     const onSubmitPet = (event) => {
         event.preventDefault();
         console.log(petName);
         setPetName('');
         console.log(petImage)
-        setResetImage('')
-
     }
 
     return (
