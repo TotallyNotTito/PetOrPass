@@ -3,6 +3,7 @@ import {Logout} from "./Logout";
 import {RatePet} from "./RatePet";
 import {SubmitPetForm} from "./SubmitPetForm";
 import {PetGallery} from "./PetGallery";
+import "../App.css";
 
 export function NavMain() {
     return (
