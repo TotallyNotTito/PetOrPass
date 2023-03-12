@@ -10,12 +10,13 @@ export function SubmitPetForm() {
 
     const onSubmitPet = async(event) => {
         event.preventDefault();
+
         const formData = new FormData();
         formData.append("petName", petName);
         formData.append("submittedBy", "test@test.test");
         formData.append("petImageFile", petImage);
+
         const uri = `http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet`;
-        console.log(`URI: ${uri}`);
         try {
             const response = await axios({
                 method: "post",
@@ -24,6 +25,7 @@ export function SubmitPetForm() {
                 headers: {"Content-Type": "multipart/form-data"}
             })
         } catch(error) {
+            // TODO: implement error message
             console.log(error);
         }
 
