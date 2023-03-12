@@ -10,12 +10,7 @@ import {getDirName} from "./lib/helpers";
 import logger from "./lib/logger";
 import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
-import {AuthenticationClient} from "auth0";
-
-let auth0 = new AuthenticationClient({
-	domain: import.meta.env.VITE_AUTH0_DOMAIN,
-	clientId: import.meta.env.VITE_AUTH0_CLIENT_ID
-});
+import Auth0Plugin from "./plugins/auth0";
 
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
@@ -52,6 +47,10 @@ export async function buildApp(useLogging: boolean) {
 		// Connects to postgres
 		app.log.info("Connecting to Database...");
 		await app.register(DbPlugin);
+
+		// Connects to Auth0
+		app.log.info("Connecting to Auth0...");
+		await app.register(Auth0Plugin);
 
 		app.log.info("App built successfully.");
 	} catch (err) {

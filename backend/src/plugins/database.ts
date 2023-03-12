@@ -31,7 +31,7 @@ const DbPlugin = fp(async (app: FastifyInstance, options: FastifyPluginOptions, 
 
 	// this object will be accessible from any fastify server instance
 	// app.status(200).send()
-	// app.db.user
+	// app.db.pet
 	app.decorate("db", {
 		connection: dataSourceConnection,
 		pet: dataSourceConnection.getRepository(Pet)

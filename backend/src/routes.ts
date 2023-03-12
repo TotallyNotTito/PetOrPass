@@ -33,7 +33,19 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * TODO: documentation
 	 */
 	app.get("/signup", async (request: FastifyRequest, reply: FastifyReply) => {
+		var data = {
+			email: '{EMAIL}',
+			password: '{PASSWORD}',
+			connection: 'Username-Password-Authentication' // Optional field.
+		};
 
+		auth0.database.signUp(data, function (err, userData) {
+			if (err) {
+				// Handle error.
+			}
+
+			console.log(userData);
+		});
 	});
 
 	/**
