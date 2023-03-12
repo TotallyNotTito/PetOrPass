@@ -10,7 +10,19 @@ import {getDirName} from "./lib/helpers";
 import logger from "./lib/logger";
 import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
+import fs from 'fs';
+import { pipeline } from "stream";
+import util from 'util';
 
+const pump = util.promisify(pipeline)
+
+
+/**
+ * TODO: Add notes
+ */
+async function onFile(part) {
+	await pump(part.file, fs.createWriteStream(part.filename))
+}
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
  * @function
@@ -30,7 +42,9 @@ export async function buildApp(useLogging: boolean) {
 		await app.register(fastifyMiddie);
 
 		// add support for multipart content type
-		await app.register(multipart);
+		await app.register(multipart, {attachFieldsToBody: true, limits: {
+			fileSize: 2000000000
+		}});
 
 		// add static file handling
 		await app.register(staticFiles, {

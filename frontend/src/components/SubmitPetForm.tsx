@@ -8,15 +8,24 @@ export function SubmitPetForm() {
     let [submitSuccess, setSubmitSuccess] = useState(false);
     const imageInputField = useRef(null);
 
-    const onSubmitPet = (event) => {
+    const onSubmitPet = async(event) => {
         event.preventDefault();
-        const uri = `http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet`
-        console.log(`URI: ${uri}`)
-        axios.postForm(uri,{
-            petName: petName,
-            submittedBy: 'test@test.test',
-            petImageFile: petImage
-        });
+        const formData = new FormData();
+        formData.append("petName", petName);
+        formData.append("submittedBy", "test@test.test");
+        formData.append("petImageFile", petImage);
+        const uri = `http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet`;
+        console.log(`URI: ${uri}`);
+        try {
+            const response = await axios({
+                method: "post",
+                url: uri,
+                data: formData,
+                headers: {"Content-Type": "multipart/form-data"}
+            })
+        } catch(error) {
+            console.log(error);
+        }
 
         setSubmitSuccess(true);
         setPetName('');
