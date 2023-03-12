@@ -13,6 +13,7 @@ import {formatImagePath} from "./lib/helpers";
 export async function pet_routes(app: FastifyInstance): Promise<void> {
 
 	// Middleware
+	// TODO: Refactor this in favor of fastify-cors
 	app.use(cors());
 
 	/**
@@ -57,7 +58,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 * @param {string} petName - name of submitted pet
 	 * @param {image file} imageFile - image of submitted pet
-	 * @param {string} submittedBy - auth ID of user that submitted pet
+	 * @param {string} submittedBy - email address of user that submitted pet
 	 * @returns {FastifyReply} 201 status code to indicate that the submitted pet was successfully stored
 	 */
 	app.post("/pet", async (request: any, reply: FastifyReply) => {
@@ -87,13 +88,16 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.get("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
 		let pet, statusCode;
-		const dbResult = await app.db.pet.createQueryBuilder('pet').select().orderBy("RANDOM()").getOne();
+		const dbResult = await app.db.pet.createQueryBuilder('pet')
+			.select()
+			.orderBy("RANDOM()")
+			.getOne();
 
 		if (dbResult === null) {
 			statusCode = 404;
 			pet = {error: "No pets have been added to the Pets table"};
 		} else {
-			statusCode = 200
+			statusCode = 200;
 			pet = {
 				pet_name: dbResult.pet_name,
 				image_name: formatImagePath(dbResult.image_name),
@@ -117,11 +121,14 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.put("/pet-score", async (request: any, reply: FastifyReply) => {
 		const {petId, petRating} = request.body;
-		const pet = await app.db.pet.findOne({where: {id: petId}});
+		// We do not explicitly handle the case where a petId does not exist in the database because
+		// 		this route can only be called on the front end by pets that are verified to exist as the
+		//			app does not offer the option to delete a pet
+		const pet = await app.db.pet.findOneOrFail({where: {id: petId}});
 
 		pet.total_score += petRating;
 		pet.total_votes += 1;
-		pet.save();
+		await pet.save();
 
 		const ratingResult = {avgScore: (pet.total_score / pet.total_votes).toFixed(2)};
 
@@ -133,14 +140,14 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * Route to retrieve list of all pets in Pets table that were submitted by a specific user
 	 * @name get/pets
 	 * @function
-	 * @param {string} submittedBy - auth ID of user who submitted pets
+	 * @param {string} submittedBy - email address of user who submitted pets
 	 * @returns {FastifyReply} list of all pets in Pets table that were submitted by a specific user
 	 */
 	app.get("/pets/:submittedBy", async (request: any, reply: FastifyReply) => {
 		const {submittedBy} = request.params;
 		const dbResult = await app.db.pet.find({where: {submitted_by: submittedBy}});
 
-		let pets = [];
+		let pets:any[] = [];
 		dbResult.forEach((pet) => {
 			pets.push({
 				pet_name: pet.pet_name,
@@ -154,7 +161,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		let statusCode;
 		if (pets.length === 0) {
 			statusCode = 404;
-			pets = {error: "No pets have been added to the Pets table by this user"};
+			pets = [{error: 'No pets have been added to the Pets table by this user'}];
 		} else {
 			statusCode = 200;
 		}
