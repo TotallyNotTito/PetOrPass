@@ -5,6 +5,7 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
 import {formatImagePath} from "./lib/helpers";
+import {DatabaseAuthenticator, AppMetadata, UserMetadata} from "auth0";
 
 /**
  * App plugin where we construct our routes
@@ -44,7 +45,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 
 		// TODO: figure out how to handle duplicate user in simplest way possible, maybe just ignore, still take to login page, but dont make another user
 		// TODO: if works, send back to login page
-		const signUpResult = await app.auth0.database.signUp(data);
+		const signUpResult = await (app.auth0.database as DatabaseAuthenticator<AppMetadata, UserMetadata>).signUp(data);
 
 		console.log(signUpResult);
 
@@ -53,15 +54,16 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	});
 
 	/**
+	 * TODO: Updated documentation
 	 * Route to redirect to the authentication microservice and log in user
 	 * @name get/login
 	 * @function
 	 * @returns {FastifyReply} TODO: Return description will be included after implementing authentication
 	 */
 	app.get("/login", async (request: FastifyRequest, reply: FastifyReply) => {
-		// TODO: This is a placeholder reply until authentication microservice implemented
+
 		reply.code(200);
-		await reply.send("PLACEHOLDER for Login via Authentication Microservice");
+		await reply.send();
 	});
 
 	/**

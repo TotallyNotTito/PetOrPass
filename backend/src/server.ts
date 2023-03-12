@@ -40,6 +40,10 @@ export async function buildApp(useLogging: boolean) {
 			prefix: "/public/",
 		});
 
+		// Connects to Auth0
+		app.log.info("Connecting to Auth0...");
+		await app.register(Auth0Plugin);
+
 		// Adds all of our Router's routes to the app
 		app.log.info("Registering routes");
 		await app.register(pet_routes);
@@ -47,10 +51,6 @@ export async function buildApp(useLogging: boolean) {
 		// Connects to postgres
 		app.log.info("Connecting to Database...");
 		await app.register(DbPlugin);
-
-		// Connects to Auth0
-		app.log.info("Connecting to Auth0...");
-		await app.register(Auth0Plugin);
 
 		app.log.info("App built successfully.");
 	} catch (err) {
