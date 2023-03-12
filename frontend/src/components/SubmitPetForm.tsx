@@ -4,16 +4,12 @@ export function SubmitPetForm() {
 
     let [petName, setPetName] = useState('');
     let [petImage, setPetImage] = useState(null);
+    let [submitSuccess, setSubmitSuccess] = useState(false);
     const imageInputField = useRef(null);
 
     const onSubmitPet = (event) => {
         event.preventDefault();
-        console.log("PET NAME");
-        console.log(petName);
-        console.log("PET IMAGE");
-        console.log(petImage);
-        console.log("INPUT REF");
-        console.log(imageInputField.current);
+        setSubmitSuccess(true);
         setPetName('');
         setPetImage(null);
         imageInputField.current.value = '';
@@ -27,6 +23,7 @@ export function SubmitPetForm() {
             <div className="row text-center">
                 <legend>Submit an image of your pet to be rated by other users</legend>
             </div>
+            {submitSuccess ? <SubmitSuccessMessage/> : null}
             <div className="row mt-3 justify-content-center">
                 <div className="col-xl-4 col-md-6 col-sm-8 col-10">
                     <label className="form-label" htmlFor="petNameInput">Pet Name</label>
@@ -60,5 +57,13 @@ export function SubmitPetForm() {
                 </div>
             </div>
         </form>
+    );
+}
+
+function SubmitSuccessMessage() {
+    return (
+      <div className="row text-center mt-3 success-text">
+          <p><strong>Success! Thanks for submitting your pet &#60;3</strong></p>
+      </div>
     );
 }
