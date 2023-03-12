@@ -24,8 +24,16 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder static html file until we implement and serve react front end
+		// TODO: delete static index.html file public dir
 		reply.code(200);
 		await reply.sendFile("index.html");
+	});
+
+	/**
+	 * TODO: documentation
+	 */
+	app.get("/signup", async (request: FastifyRequest, reply: FastifyReply) => {
+
 	});
 
 	/**

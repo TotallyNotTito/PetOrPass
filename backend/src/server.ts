@@ -10,6 +10,12 @@ import {getDirName} from "./lib/helpers";
 import logger from "./lib/logger";
 import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
+import {AuthenticationClient} from "auth0";
+
+let auth0 = new AuthenticationClient({
+	domain: import.meta.env.VITE_AUTH0_DOMAIN,
+	clientId: import.meta.env.VITE_AUTH0_CLIENT_ID
+});
 
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
@@ -17,6 +23,7 @@ import DbPlugin from "./plugins/database";
  * @param useLogging Whether to log or not
  * @return  Promise<FastifyInstance>
  */
+
 export async function buildApp(useLogging: boolean) {
 	const app = useLogging ?
 		Fastify({
