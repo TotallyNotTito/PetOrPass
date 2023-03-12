@@ -1,4 +1,5 @@
 import {useState, useRef} from 'react';
+import axios from 'axios';
 
 export function SubmitPetForm() {
 
@@ -9,6 +10,13 @@ export function SubmitPetForm() {
 
     const onSubmitPet = (event) => {
         event.preventDefault();
+        axios.postForm(`http://${import.meta.env.VITE_BACKEND_IP}:
+                        ${import.meta.env.VITE_BACKEND_PORT}/pet`,{
+            petName: petName,
+            submittedBy: 'test@test.test',
+            petImageFile: petImage
+        });
+
         setSubmitSuccess(true);
         setPetName('');
         setPetImage(null);
