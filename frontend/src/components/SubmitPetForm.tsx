@@ -10,8 +10,9 @@ export function SubmitPetForm() {
 
     const onSubmitPet = (event) => {
         event.preventDefault();
-        axios.postForm(`http://${import.meta.env.VITE_BACKEND_IP}:
-                        ${import.meta.env.VITE_BACKEND_PORT}/pet`,{
+        const uri = `http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet`
+        console.log(`URI: ${uri}`)
+        axios.postForm(uri,{
             petName: petName,
             submittedBy: 'test@test.test',
             petImageFile: petImage

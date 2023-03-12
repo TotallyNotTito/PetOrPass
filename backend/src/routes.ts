@@ -65,7 +65,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		const {petName, submittedBy} = request.body;
 		const imageData = await request.file();
 		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${imageData.mimetype}`;
-
+		console.log('Yay you made it to the backend ROUTE!')
 		const pet = new Pet();
 		pet.pet_name = petName;
 		pet.image_name = imageName;
