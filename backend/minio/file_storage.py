@@ -33,7 +33,6 @@ class FileDumper():
     
     def show_pets(self):
         objects = self.client.list_objects(self.bucket)
-        for image in objects:
-            print(image)
+        return objects if objects else None
 
 
