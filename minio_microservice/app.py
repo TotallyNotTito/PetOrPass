@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from backend.minio import file_storage
 from flask import Flask
 from flask import request, redirect
 import os
