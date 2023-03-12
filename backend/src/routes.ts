@@ -62,6 +62,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @returns {FastifyReply} 201 status code to indicate that the submitted pet was successfully stored
 	 */
 	app.post("/pet", async (request: any, reply: FastifyReply) => {
+		console.log(request.body)
 		const {petName, submittedBy} = request.body;
 		const imageData = await request.file();
 		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${imageData.mimetype}`;
