@@ -34,20 +34,18 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * TODO: documentation
 	 */
 	app.get("/signup", async (request: FastifyRequest, reply: FastifyReply) => {
-		// TODO: get data info from FE request
 		// TODO: make sure sign up form on front end does not allow empty email or pw fields and that has email format - disable submit button
 		// TODO: add note to form to make sure user knows to use real email address otherwise pw reset wont work - disable submit button
+		const {email, password} = request.body;
 		const data = {
-			email: 'kelsey.lee.werner@gmail.com',
-			password: 'pw1234',
+			email,
+			password,
 			connection: import.meta.env.VITE_AUTH0_DB_CONNECTION
 		};
 
 		// TODO: figure out how to handle duplicate user in simplest way possible, maybe just ignore, still take to login page, but dont make another user
 		// TODO: if works, send back to login page
 		const signUpResult = await (app.auth0.database as DatabaseAuthenticator<AppMetadata, UserMetadata>).signUp(data);
-
-		console.log(signUpResult);
 
 		reply.code(200);
 		await reply.send();
@@ -61,6 +59,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @returns {FastifyReply} TODO: Return description will be included after implementing authentication
 	 */
 	app.get("/login", async (request: FastifyRequest, reply: FastifyReply) => {
+		app.auth0
 
 		reply.code(200);
 		await reply.send();
@@ -88,7 +87,6 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @returns {FastifyReply} 201 status code to indicate that the submitted pet was successfully stored
 	 */
 	app.post("/pet", async (request: any, reply: FastifyReply) => {
-		// TODO: make form for submitting pet have disabled button if form fields empty
 		const {petName, submittedBy} = request.body;
 		const imageData = await request.file();
 		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${imageData.mimetype}`;

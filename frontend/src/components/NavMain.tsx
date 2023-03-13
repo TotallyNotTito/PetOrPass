@@ -3,6 +3,8 @@ import {Logout} from "./Logout";
 import {RatePet} from "./RatePet";
 import {SubmitPetForm} from "./SubmitPetForm";
 import {PetGallery} from "./PetGallery";
+import {Login} from "./Login";
+import {Profile} from "./Profile";
 
 export function NavMain() {
     return (
@@ -61,6 +63,8 @@ function NavRoutes() {
             <Route path="/submit-pet" element={<SubmitPetForm/>}/>
             <Route path="/view-pets" element={<PetGallery/>}/>
             <Route path="/logout" element={<Logout/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/profile" element={<Profile/>}/>
         </Routes>
     );
 }

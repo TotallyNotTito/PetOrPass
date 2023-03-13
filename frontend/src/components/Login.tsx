@@ -1,3 +1,11 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import React from "react";
+
 export function Login() {
-    return (<div>LOGIN PAGE PLACEHOLDER</div>);
-}
+    const { loginWithRedirect } = useAuth0();
+
+    return (
+        <button className="below-navbar" onClick={() => loginWithRedirect()}>Log In</button>
+    );
+};
+
