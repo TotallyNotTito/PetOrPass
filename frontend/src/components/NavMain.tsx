@@ -6,6 +6,7 @@ import {PetGallery} from "./PetGallery";
 import {Login} from "./Login";
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
+import {ProtectedRoute} from "./ProtectedRoute";
 
 export function NavMain() {
     return (
@@ -78,9 +79,9 @@ function NavLinks() {
 function NavRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<RatePet/>}/>
-            <Route path="/submit-pet" element={<SubmitPetForm/>}/>
-            <Route path="/view-pets" element={<PetGallery/>}/>
+            <Route path="/" element={<ProtectedRoute><RatePet/></ProtectedRoute>}/>
+            <Route path="/submit-pet" element={<ProtectedRoute><SubmitPetForm/></ProtectedRoute>}/>
+            <Route path="/view-pets" element={<ProtectedRoute><PetGallery/></ProtectedRoute>}/>
             <Route path="/logout" element={<Logout/>}/>
             <Route path="/login" element={<Login/>}/>
         </Routes>
