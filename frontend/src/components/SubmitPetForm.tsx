@@ -6,9 +6,20 @@ export function SubmitPetForm() {
     let [petName, setPetName] = useState('');
     let [petImage, setPetImage] = useState(null);
     let [submitSuccess, setSubmitSuccess] = useState(false);
+    let [submitError, setSubmitError] = useState(false);
     const imageInputField = useRef(null);
 
-    const onSubmitPet = async(event) => {
+    const onChangePetName = (event:any) => {
+        setPetName(event.target.value);
+        setSubmitError(false);
+    }
+
+    const onChangePetImage = (event:any) => {
+        setPetImage(event.target.files[0]);
+        setSubmitError(false);
+    }
+
+    const onSubmitPet = async(event:any) => {
         event.preventDefault();
 
         const formData = new FormData();
@@ -17,19 +28,20 @@ export function SubmitPetForm() {
         formData.append("petImageFile", petImage);
 
         const uri = `http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet`;
+        let success = true;
         try {
-            const response = await axios({
+            await axios({
                 method: "post",
                 url: uri,
                 data: formData,
                 headers: {"Content-Type": "multipart/form-data"}
             })
         } catch(error) {
-            // TODO: implement error message
-            console.log(error);
+            setSubmitError(true);
+            success = false;
         }
 
-        setSubmitSuccess(true);
+        setSubmitSuccess(success);
         setPetName('');
         setPetImage(null);
         imageInputField.current.value = '';
@@ -44,11 +56,12 @@ export function SubmitPetForm() {
                 <legend>Submit an image of your pet to be rated by other users</legend>
             </div>
             {submitSuccess ? <SubmitSuccessMessage/> : null}
+            {submitError ? <SubmitErrorMessage/> : null}
             <div className="row mt-3 justify-content-center">
                 <div className="col-xl-4 col-md-6 col-sm-8 col-10">
                     <label className="form-label" htmlFor="petNameInput">Pet Name</label>
                     <input className="form-control" 
-                           onChange={pn => setPetName(pn.target.value)} 
+                           onChange={pn => onChangePetName(pn)}
                            value={petName}
                            type="text"
                            id="petNameInput" 
@@ -65,7 +78,7 @@ export function SubmitPetForm() {
                            name="petImageInput" 
                            accept="image/*"
                            ref={imageInputField}
-                           onChange={pi => setPetImage(pi.target.files[0])}
+                           onChange={pi => onChangePetImage(pi)}
                     />
                 </div>
             </div>
@@ -85,5 +98,13 @@ function SubmitSuccessMessage() {
       <div className="row text-center mt-3 success-text">
           <p><strong>Success! Thanks for submitting your pet &#60;3</strong></p>
       </div>
+    );
+}
+
+function SubmitErrorMessage() {
+    return (
+        <div className="row text-center mt-3 error-text">
+            <p><strong>uh oh! Looks like something went wrong! Try re-submitting with a different pet name and/or image</strong></p>
+        </div>
     );
 }
