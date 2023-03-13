@@ -64,23 +64,29 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	app.post("/pet", async (request: any, reply: FastifyReply) => {
 		const data = await request.file();
 		const {petName, submittedBy} = data.fields;
-		const fileName = data.filename.split('.');
-		const fileExtension = fileName[fileName.length - 1];
-		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${fileExtension}`;
 
-		const pet = new Pet();
-		pet.pet_name = petName.value;
-		pet.image_name = imageName;
-		pet.total_score = 0;
-		pet.total_votes = 0;
-		pet.submitted_by = submittedBy.value;
-		await pet.save();
+		if (data.mimetype.includes('image')) {
+			const fileName = data.filename.split('.');
+			const fileExtension = fileName[fileName.length - 1];
+			const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${fileExtension}`;
 
-		// TODO: Pet image will be saved to MinIO file storage with new name once file storage implemented
-		// data.file will contain the actual file we want to send to minio
+			const pet = new Pet();
+			pet.pet_name = petName.value;
+			pet.image_name = imageName;
+			pet.total_score = 0;
+			pet.total_votes = 0;
+			pet.submitted_by = submittedBy.value;
+			await pet.save();
 
-		reply.code(201);
-		await reply.send();
+			// TODO: Pet image will be saved to MinIO file storage with new name once file storage implemented
+			// data.file will contain the actual file we want to send to minio
+
+			reply.code(201);
+			await reply.send();
+		} else {
+			reply.code(500);
+			await reply.send({error: "Incorrect file type was submitted, must be an image file"});
+		}
 	});
 
 	/**
