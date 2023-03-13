@@ -10,7 +10,6 @@ import {getDirName} from "./lib/helpers";
 import logger from "./lib/logger";
 import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
-import Auth0Plugin from "./plugins/auth0";
 
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
@@ -18,7 +17,6 @@ import Auth0Plugin from "./plugins/auth0";
  * @param useLogging Whether to log or not
  * @return  Promise<FastifyInstance>
  */
-
 export async function buildApp(useLogging: boolean) {
 	const app = useLogging ?
 		Fastify({
@@ -39,10 +37,6 @@ export async function buildApp(useLogging: boolean) {
 			root: path.join(getDirName(import.meta), "../public"),
 			prefix: "/public/",
 		});
-
-		// Connects to Auth0
-		app.log.info("Connecting to Auth0...");
-		await app.register(Auth0Plugin);
 
 		// Adds all of our Router's routes to the app
 		app.log.info("Registering routes");

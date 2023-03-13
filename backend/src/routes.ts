@@ -31,27 +31,6 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	});
 
 	/**
-	 * TODO: documentation
-	 */
-	app.get("/signup", async (request: FastifyRequest, reply: FastifyReply) => {
-		// TODO: make sure sign up form on front end does not allow empty email or pw fields and that has email format - disable submit button
-		// TODO: add note to form to make sure user knows to use real email address otherwise pw reset wont work - disable submit button
-		const {email, password} = request.body;
-		const data = {
-			email,
-			password,
-			connection: import.meta.env.VITE_AUTH0_DB_CONNECTION
-		};
-
-		// TODO: figure out how to handle duplicate user in simplest way possible, maybe just ignore, still take to login page, but dont make another user
-		// TODO: if works, send back to login page
-		const signUpResult = await (app.auth0.database as DatabaseAuthenticator<AppMetadata, UserMetadata>).signUp(data);
-
-		reply.code(200);
-		await reply.send();
-	});
-
-	/**
 	 * TODO: Updated documentation
 	 * Route to redirect to the authentication microservice and log in user
 	 * @name get/login
@@ -59,10 +38,8 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @returns {FastifyReply} TODO: Return description will be included after implementing authentication
 	 */
 	app.get("/login", async (request: FastifyRequest, reply: FastifyReply) => {
-		app.auth0
-
 		reply.code(200);
-		await reply.send();
+		await reply.send("PLACEHOLDER for Login via Authentication Microservice");
 	});
 
 	/**
