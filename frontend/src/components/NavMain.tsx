@@ -4,6 +4,8 @@ import {RatePet} from "./RatePet";
 import {SubmitPetForm} from "./SubmitPetForm";
 import {PetGallery} from "./PetGallery";
 import {Login} from "./Login";
+import { useAuth0 } from "@auth0/auth0-react";
+import React from "react";
 
 export function NavMain() {
     return (
@@ -15,6 +17,24 @@ export function NavMain() {
 }
 
 function NavBar() {
+    const { isAuthenticated, isLoading } = useAuth0();
+
+    if (isLoading) {
+        return (<></>);
+    }
+
+    return (
+        <>
+            {
+                isAuthenticated ?
+                    <NavView/>
+                    : <></>
+            }
+        </>
+    );
+}
+
+function NavView() {
     return (
         <nav className="navbar navbar-expand-md navbar-dark fixed-top mb-5 primary-color">
             <div className="container-fluid">
