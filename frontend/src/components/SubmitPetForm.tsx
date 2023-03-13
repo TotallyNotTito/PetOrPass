@@ -7,11 +7,13 @@ export function SubmitPetForm() {
     let [petImage, setPetImage] = useState(null);
     let [submitSuccess, setSubmitSuccess] = useState(false);
     let [submitError, setSubmitError] = useState(false);
+    // let [disableButton, setDisableButton] = useState(true);
     const imageInputField = useRef(null);
 
     const onChangePetName = (event:any) => {
         setPetName(event.target.value);
         setSubmitError(false);
+        // petName === "" ? setDisableButton(true) : setDisableButton(false);
     }
 
     const onChangePetImage = (event:any) => {
@@ -86,7 +88,8 @@ export function SubmitPetForm() {
                 <div className="col-xl-4 col-md-6 col-sm-8 col-10">
                     <button className="btn btn-lg button-color w-100"
                             onClick={onSubmitPet}
-                            type="submit">Submit!</button>
+                            type="submit"
+                            disabled={petName === ''}>Submit!</button>
                 </div>
             </div>
         </form>
