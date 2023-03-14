@@ -23,7 +23,9 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 * @returns {FastifyReply} TODO: Return description will be included after implementing react app
 	 */
-	app.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
+	app.get("/", {
+		onRequest: [app.authenticate]
+	}, async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder static html file until we implement and serve react front end
 		// TODO: delete static index.html file public dir
 		reply.code(200);

@@ -55,6 +55,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "fastify": "^4.11.0",
+    "fastify-auth0-verify": "^1.0.0",
     "fastify-cors": "^6.1.0",
     "fastify-env": "^2.2.0",
     "fastify-plugin": "^4.5.0",

@@ -10,6 +10,7 @@ import {getDirName} from "./lib/helpers";
 import logger from "./lib/logger";
 import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
+import fastifyAuth0 from 'fastify-auth0-verify';
 
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
@@ -38,8 +39,15 @@ export async function buildApp(useLogging: boolean) {
 			prefix: "/public/",
 		});
 
+		// adding auth protection to the routes
+		app.log.info("Registering Auth0...");
+		await app.register(fastifyAuth0, {
+			domain: import.meta.env.VITE_AUTH0_DOMAIN,
+			audience: import.meta.env.VITE_AUTH0_CLIENT_ID
+		});
+
 		// Adds all of our Router's routes to the app
-		app.log.info("Registering routes");
+		app.log.info("Registering routes...");
 		await app.register(pet_routes);
 
 		// Connects to postgres
