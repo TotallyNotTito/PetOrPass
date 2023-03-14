@@ -30,7 +30,7 @@ export async function buildApp(useLogging: boolean) {
 		await app.register(fastifyMiddie);
 
 		// add support for multipart content type
-		await app.register(multipart);
+		await app.register(multipart, {limits: {fileSize: 2000000000}});
 
 		// add static file handling
 		await app.register(staticFiles, {
