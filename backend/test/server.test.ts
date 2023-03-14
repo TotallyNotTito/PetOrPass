@@ -44,30 +44,6 @@ describe("testing the test framework itself", () => {
 });
 
 describe("Route testing", () => {
-	it("logs into application", async () => {
-		const response = await app.inject({
-			method: "GET",
-			url: "/login",
-		});
-
-		// TODO: This is a placeholder test until authentication microservice implemented
-
-		expect(response.statusCode)
-			.toBe(200);
-	});
-
-	it("logs out of application", async () => {
-		const response = await app.inject({
-			method: "GET",
-			url: "/logout",
-		});
-
-		// TODO: This is a placeholder test until authentication microservice implemented
-
-		expect(response.statusCode)
-			.toBe(200);
-	});
-
 	it("retrieves random pet from database", async () => {
 		const petNames = ['Karianne', 'Celestino', 'Alfreda', 'Shayna', 'Francisco', 'Etha', 'Leonie', 'Mauricio', 'Kristofer', 'Miguel'];
 		const imageNames = [formatImagePath("cow4668d202-12a3-4d72-991e-938281034ffc.jpg"),

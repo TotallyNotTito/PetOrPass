@@ -23,37 +23,11 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 * @returns {FastifyReply} TODO: Return description will be included after implementing react app
 	 */
-	app.get("/", {
-		onRequest: [app.authenticate]
-	}, async (request: FastifyRequest, reply: FastifyReply) => {
+	app.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder static html file until we implement and serve react front end
 		// TODO: delete static index.html file public dir
 		reply.code(200);
 		await reply.sendFile("index.html");
-	});
-
-	/**
-	 * TODO: Updated documentation
-	 * Route to redirect to the authentication microservice and log in user
-	 * @name get/login
-	 * @function
-	 * @returns {FastifyReply} TODO: Return description will be included after implementing authentication
-	 */
-	app.get("/login", async (request: FastifyRequest, reply: FastifyReply) => {
-		reply.code(200);
-		await reply.send("PLACEHOLDER for Login via Authentication Microservice");
-	});
-
-	/**
-	 * Route to redirect to the authentication microservice and log out user
-	 * @name get/logout
-	 * @function
-	 * @returns {FastifyReply} TODO: Return description will be included after implementing authentication
-	 */
-	app.get("/logout", async (request: FastifyRequest, reply: FastifyReply) => {
-		// TODO: This is a placeholder reply until authentication microservice implemented
-		reply.code(200);
-		await reply.send("PLACEHOLDER for Logout via Authentication Microservice");
 	});
 
 	/**
@@ -65,7 +39,9 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @param {string} submittedBy - email address of user that submitted pet
 	 * @returns {FastifyReply} 201 status code to indicate that the submitted pet was successfully stored
 	 */
-	app.post("/pet", async (request: any, reply: FastifyReply) => {
+	app.post("/pet", {
+		onRequest: [app.authenticate]
+	}, async (request: any, reply: FastifyReply) => {
 		const {petName, submittedBy} = request.body;
 		const imageData = await request.file();
 		const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${imageData.mimetype}`;
@@ -90,7 +66,9 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @function
 	 * @returns {FastifyReply} details of a randomly selected pet to be displayed to the user
 	 */
-	app.get("/pet", async (request: FastifyRequest, reply: FastifyReply) => {
+	app.get("/pet", {
+		onRequest: [app.authenticate]
+	}, async (request: FastifyRequest, reply: FastifyReply) => {
 		let pet, statusCode;
 		const dbResult = await app.db.pet.createQueryBuilder('pet')
 			.select()
@@ -123,7 +101,9 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @param {number} petRating - user rating received by pet
 	 * @returns {FastifyReply} updated average score for pet
 	 */
-	app.put("/pet-score", async (request: any, reply: FastifyReply) => {
+	app.put("/pet-score", {
+		onRequest: [app.authenticate]
+	}, async (request: any, reply: FastifyReply) => {
 		const {petId, petRating} = request.body;
 		// We do not explicitly handle the case where a petId does not exist in the database because
 		// 		this route can only be called on the front end by pets that are verified to exist as the
@@ -147,7 +127,9 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 * @param {string} submittedBy - email address of user who submitted pets
 	 * @returns {FastifyReply} list of all pets in Pets table that were submitted by a specific user
 	 */
-	app.get("/pets/:submittedBy", async (request: any, reply: FastifyReply) => {
+	app.get("/pets/:submittedBy", {
+		onRequest: [app.authenticate]
+	}, async (request: any, reply: FastifyReply) => {
 		const {submittedBy} = request.params;
 		const dbResult = await app.db.pet.find({where: {submitted_by: submittedBy}});
 
