@@ -20,9 +20,8 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 	 */
 	app.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
 		// TODO: This is a placeholder static html file until we implement and serve react front end
-		// TODO: delete static index.html file public dir
 		reply.code(200);
-		await reply.sendFile("index.html");
+		await reply.send("successfully hit root route");
 	});
 
 	/**
@@ -159,15 +158,5 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 
 		reply.code(statusCode);
 		await reply.send(JSON.stringify(pets));
-	});
-
-	/**
-	 * Route replying to /test path for test-testing
-	 * @name get/test
-	 * @function
-	 */
-	app.get("/test", async (request: FastifyRequest, reply: FastifyReply) => {
-		reply.code(200);
-		await reply.send("GET Test");
 	});
 }

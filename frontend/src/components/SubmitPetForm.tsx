@@ -74,10 +74,12 @@ export function SubmitPetForm() {
                     }
                 })
             } catch(error) {
+                // If backend route returns an error, display error message to user
                 setSubmitError(true);
                 success = false;
             }
 
+            // If form is submitted successfully, clear form data and display success message to user
             setSubmitSuccess(success);
             setPetName('');
             setPetImage(null);
