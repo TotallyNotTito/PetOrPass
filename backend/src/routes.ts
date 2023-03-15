@@ -1,6 +1,5 @@
 /** @module Routes */
 
-import cors from "cors";
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
@@ -12,11 +11,6 @@ import {DatabaseAuthenticator, AppMetadata, UserMetadata} from "auth0";
  * @param {FastifyInstance} app our main Fastify app instance
  */
 export async function pet_routes(app: FastifyInstance): Promise<void> {
-
-	// Middleware
-	// TODO: Refactor this in favor of fastify-cors
-	app.use(cors());
-
 	/**
 	 * Root route to serve landing page of app
 	 * @name get/root
@@ -136,6 +130,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		let pets:any[] = [];
 		dbResult.forEach((pet) => {
 			pets.push({
+				pet_id: pet.id,
 				pet_name: pet.pet_name,
 				image_name: formatImagePath(pet.image_name),
 				total_score: pet.total_score,

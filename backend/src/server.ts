@@ -1,7 +1,7 @@
 /** @module Server */
 
 // This will let us use our basic middlewares now, then transition to hooks later
-import fastifyMiddie from "@fastify/middie";
+import cors from "@fastify/cors";
 import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";
 import Fastify, {FastifyInstance} from "fastify";
@@ -27,8 +27,12 @@ export async function buildApp(useLogging: boolean) {
 		: Fastify({logger: false});
 
 	try {
-		// add express-like 'app.use' middleware support
-		await app.register(fastifyMiddie);
+		// add support for cors
+		await app.register(cors, {
+			origin: (origin, cb) => {
+				cb(null, true);
+			}
+		});
 
 		// add support for multipart content type
 		await app.register(multipart);

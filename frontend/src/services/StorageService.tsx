@@ -4,9 +4,6 @@ import {LocalStorageCache} from "@auth0/auth0-react";
 export const StorageProvider = ({children}) => {
 
     const [localStorageCache, setLocalStorageCache] = useState(new LocalStorageCache());
-    
-//     TODO: need getter and setter for token in storage
-//     TODO: need to set up with httpservice to have correct token
 
     const useStorageContextPackage = {
         localStorageCache
