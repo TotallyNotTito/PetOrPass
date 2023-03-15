@@ -1,6 +1,5 @@
 /** @module Server */
 
-// This will let us use our basic middlewares now, then transition to hooks later
 import cors from "@fastify/cors";
 import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";

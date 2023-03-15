@@ -8,10 +8,16 @@ import {ErrorMessage} from "./ErrorMessage";
 export function PetGallery() {
     const {localStorageCache} = useStorage();
     const {logout, isLoading, isAuthenticated, user} = useAuth0();
-    const [emptyGallery, setEmptyGallery] = useState(false);
-    const [petList, setPetList] = useState([]);
+    let [emptyGallery, setEmptyGallery] = useState(false);
+    let [petList, setPetList] = useState([]);
 
     useEffect(() => {
+        // Before verifying if user is authenticated, must check if SDK is still loading
+        // If still loading, exit useEffect, then wait for isLoading state to change and trigger another call to useEffect
+        if (isLoading) {
+            return;
+        }
+
         // Verify that local storage contains token keys,
         // and if not, log out and redirect to login page
         const storageKeys = localStorageCache.allKeys();
@@ -35,12 +41,6 @@ export function PetGallery() {
             return;
         } else {
             token = localStorageCache.get(foundKey).id_token;
-        }
-
-        // Before verifying if user is authenticated, must check if SDK is still loading
-        // If still loading, exit useEffect, then wait for isLoading state to change and trigger another call to useEffect
-        if (isLoading) {
-            return;
         }
 
         // If user is authenticated, we can call protected backend route to retrieve list of pets
@@ -83,7 +83,7 @@ export function PetGallery() {
                         petId: item.id,
                         petName: item.pet_name,
                         imageUrl: item.image_name,
-                        avgScore: (item.total_score / item.total_votes).toFixed(2)
+                        avgScore: item.total_votes === 0 ? 0 : (item.total_score / item.total_votes).toFixed(2)
                     });
                 });
                 setPetList(pets);

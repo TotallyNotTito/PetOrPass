@@ -1,8 +1,11 @@
 import {useState, useRef} from 'react';
 import axios from 'axios';
+import {useAuth0} from "@auth0/auth0-react";
+import {useStorage} from "../services/StorageService";
 
 export function SubmitPetForm() {
-
+    const {localStorageCache} = useStorage();
+    const {logout, isLoading, isAuthenticated, user} = useAuth0();
     let [petName, setPetName] = useState('');
     let [petImage, setPetImage] = useState(null);
     let [submitSuccess, setSubmitSuccess] = useState(false);
@@ -22,29 +25,66 @@ export function SubmitPetForm() {
     const onSubmitPet = async(event:any) => {
         event.preventDefault();
 
-        const formData = new FormData();
-        formData.append("petName", petName);
-        formData.append("submittedBy", "test@test.test");
-        formData.append("petImageFile", petImage);
+        // Before verifying if user is authenticated, must check if SDK is still loading
+        while (isLoading) {}
 
-        const uri = `http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet`;
-        let success = true;
-        try {
-            await axios({
-                method: "post",
-                url: uri,
-                data: formData,
-                headers: {"Content-Type": "multipart/form-data"}
-            })
-        } catch(error) {
-            setSubmitError(true);
-            success = false;
+        // Verify that local storage contains token keys,
+        // and if not, log out and redirect to login page
+        const storageKeys = localStorageCache.allKeys();
+        if (storageKeys.length === 0) {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+            return;
         }
 
-        setSubmitSuccess(success);
-        setPetName('');
-        setPetImage(null);
-        imageInputField.current.value = '';
+        // Verify that correct key for accessing jwt exists in local storage
+        // and if not, log out and redirect to login page
+        let foundKey = false;
+        storageKeys.forEach((key)=>{
+            if (key.includes("@@user@@")) {
+                foundKey = key;
+            }
+        })
+
+        let token;
+        if (foundKey === false) {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+            return;
+        } else {
+            token = localStorageCache.get(foundKey).id_token;
+        }
+
+        // If user is authenticated, we can call protected backend route to submit pet form
+        // If user is not authenticated, log out and redirect to login page
+        if (isAuthenticated) {
+            const formData = new FormData();
+            formData.append("petName", petName);
+            formData.append("submittedBy", user.email);
+            formData.append("petImageFile", petImage);
+
+            const uri = `http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet`;
+            let success = true;
+            try {
+                await axios({
+                    method: "post",
+                    url: uri,
+                    data: formData,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+            } catch(error) {
+                setSubmitError(true);
+                success = false;
+            }
+
+            setSubmitSuccess(success);
+            setPetName('');
+            setPetImage(null);
+            imageInputField.current.value = '';
+        } else {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+        }
     }
 
     return (

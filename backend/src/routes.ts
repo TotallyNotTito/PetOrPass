@@ -5,6 +5,7 @@ import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
 import {formatImagePath} from "./lib/helpers";
 import {DatabaseAuthenticator, AppMetadata, UserMetadata} from "auth0";
+import {v4 as uuidv4} from 'uuid';
 
 /**
  * App plugin where we construct our routes
@@ -39,11 +40,10 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		const data = await request.file();
 		const {petName, submittedBy} = data.fields;
 
-
 		if (data.mimetype.includes('image')) {
 			const fileName = data.filename.split('.');
 			const fileExtension = fileName[fileName.length - 1];
-			const imageName = `${faker.animal.type()}${faker.datatype.uuid()}.${fileExtension}`;
+			const imageName = `${uuidv4()}-${Date.now()}.${fileExtension}`;
 
 			const pet = new Pet();
 			pet.pet_name = petName.value;
