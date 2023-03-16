@@ -10,6 +10,7 @@ export function SubmitPetForm() {
     let [petImage, setPetImage] = useState(null);
     let [submitSuccess, setSubmitSuccess] = useState(false);
     let [submitError, setSubmitError] = useState(false);
+    let [disableButton, setDisableButton] = useState(false);
     const imageInputField = useRef(null);
 
     const onChangePetName = (event:any) => {
@@ -24,6 +25,7 @@ export function SubmitPetForm() {
 
     const onSubmitPet = async(event:any) => {
         event.preventDefault();
+        setDisableButton(true);
 
         // Before verifying if user is authenticated, must check if SDK is still loading
         while (isLoading) {}
@@ -84,6 +86,7 @@ export function SubmitPetForm() {
             setPetName('');
             setPetImage(null);
             imageInputField.current.value = '';
+            setDisableButton(false);
         } else {
             logout({ logoutParams: { returnTo: window.location.origin } });
         }
@@ -129,7 +132,7 @@ export function SubmitPetForm() {
                     <button className="btn btn-lg button-color w-100"
                             onClick={onSubmitPet}
                             type="submit"
-                            disabled={petName === '' || petImage === null || imageInputField.current.value === ''}>Submit!</button>
+                            disabled={disableButton || petName === '' || petImage === null || imageInputField.current.value === ''}>Submit!</button>
                 </div>
             </div>
         </form>

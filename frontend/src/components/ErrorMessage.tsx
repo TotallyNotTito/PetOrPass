@@ -1,8 +1,9 @@
 import errorImage from "../assets/error_message.svg";
 import React from "react";
 
+// TODO: do i need to move type definitions elsewhere?
 export type ErrorProps = {
-    errorMessage: string,
+    errorMessage: string
 }
 export function ErrorMessage(props: ErrorProps) {
     let {errorMessage} = props;

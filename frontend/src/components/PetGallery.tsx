@@ -101,8 +101,51 @@ export function PetGallery() {
             {
                 emptyGallery ?
                     <ErrorMessage errorMessage="uh-oh! Looks like you have not submitted any pets yet for rating! You can submit your first pet by visiting the Submit Pet tab." />
-                    : <ul className="below-navbar">{petList.map((pet) => <li key={pet.petId}>{pet.petName} - {pet.avgScore} - {pet.imageUrl}</li>)}</ul>
+                    :
+                    <main className="container below-navbar">
+                        <div className="row text-center">
+                            <h1>Pet Gallery</h1>
+                        </div>
+                        <div className="row text-center mb-5">
+                            <legend>View all of the pets you submitted that were rated by other users</legend>
+                        </div>
+                        <div className="row align-items-center justify-content-center">
+                            {petList.map((pet) => <PetProfile key={pet.petId} petName={pet.petName} avgScore={pet.avgScore} imageURL={pet.imageUrl} />)}
+                        </div>
+                    </main>
             }
         </>
     );
 }
+
+// TODO: do i need to move type definitions elsewhere?
+export type PetProfileProps = {
+    petName: string,
+    avgScore: number,
+    imageUrl: string
+}
+
+function PetProfile(props: PetProfileProps) {
+    let {petName, avgScore, imageUrl} = props;
+
+    console.log("in petprofile: ")
+    console.log(imageUrl)
+
+
+    return (
+        <div className="col">
+            <div className="card card-width mb-5 mx-auto">
+                <img src={imageUrl}
+                     className="card-img-top"
+                     alt={`Photo of ${petName}`}
+                />
+                <div className="card-body">
+                    <h5 className="card-title">{petName}</h5>
+                    <p className="card-text">Pet or Pass Score: {avgScore}</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
