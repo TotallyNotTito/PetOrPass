@@ -6,8 +6,6 @@ import {Pet} from "../db/models/pet";
 import {FastifyInstance, FastifyPluginOptions} from "fastify";
 import {AppDataSource} from "../db/datasources/dev_datasource";
 
-
-
 /** This is AWESOME - we're telling typescript we're adding our own "thing" to base 'app', so we get FULL IDE/TS support */
 declare module 'fastify' {
 	interface FastifyInstance {
@@ -33,7 +31,7 @@ const DbPlugin = fp(async (app: FastifyInstance, options: FastifyPluginOptions, 
 
 	// this object will be accessible from any fastify server instance
 	// app.status(200).send()
-	// app.db.user
+	// app.db.pet
 	app.decorate("db", {
 		connection: dataSourceConnection,
 		pet: dataSourceConnection.getRepository(Pet)
