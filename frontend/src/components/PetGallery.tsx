@@ -80,12 +80,15 @@ export function PetGallery() {
                 let pets = [];
                 result.data.forEach((item) => {
                     pets.push({
-                        petId: item.id,
+                        petId: item.pet_id,
                         petName: item.pet_name,
                         imageUrl: item.image_name,
                         avgScore: item.total_votes === 0 ? 0 : (item.total_score / item.total_votes).toFixed(2)
                     });
                 });
+
+                console.log(pets)
+
                 setPetList(pets);
                 setEmptyGallery(false);
             }
@@ -110,7 +113,7 @@ export function PetGallery() {
                             <legend>View all of the pets you submitted that were rated by other users</legend>
                         </div>
                         <div className="row align-items-center justify-content-center">
-                            {petList.map((pet) => <PetProfile key={pet.petId} petName={pet.petName} avgScore={pet.avgScore} imageURL={pet.imageUrl} />)}
+                            {petList.map((pet) => <PetProfile key={pet.petId} petName={pet.petName} avgScore={pet.avgScore} imageUrl={pet.imageUrl} />)}
                         </div>
                     </main>
             }
@@ -127,10 +130,6 @@ export type PetProfileProps = {
 
 function PetProfile(props: PetProfileProps) {
     let {petName, avgScore, imageUrl} = props;
-
-    console.log("in petprofile: ")
-    console.log(imageUrl)
-
 
     return (
         <div className="col">
