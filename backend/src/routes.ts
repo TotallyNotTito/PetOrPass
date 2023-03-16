@@ -4,7 +4,6 @@ import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
 import {formatImagePath} from "./lib/helpers";
-import {DatabaseAuthenticator, AppMetadata, UserMetadata} from "auth0";
 import {v4 as uuidv4} from 'uuid';
 
 /**
