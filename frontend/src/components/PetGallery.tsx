@@ -139,5 +139,3 @@ function PetProfile(props: PetProfileProps) {
         </div>
     );
 }
-
-

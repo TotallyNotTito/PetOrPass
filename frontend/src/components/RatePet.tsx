@@ -12,6 +12,8 @@ export function RatePet() {
     let [emptyPets, setEmptyPets] = useState(false);
     let [petToRate, setPetToRate] = useState({});
     let [nextPet, setNextPet] = useState(false);
+    let [disableRatingButtons, setDisableRatingButtons] = useState(false);
+    let [disableNextButton, setDisableNextButton] = useState(false);
 
     useEffect(() => {
         // Before verifying if user is authenticated, must check if SDK is still loading
@@ -83,6 +85,8 @@ export function RatePet() {
                 setPetToRate(pet);
                 setEmptyPets(false);
                 setNextPet(false);
+                setDisableRatingButtons(false);
+                setDisableNextButton(false);
             }
 
             getPet();
@@ -113,6 +117,11 @@ export function RatePet() {
                                 setNextPet={setNextPet}
                                 setRetrieveNextPet={setRetrieveNextPet}
                                 retrieveNextPet={retrieveNextPet}
+                                nextPet={nextPet}
+                                setDisableRatingButtons={setDisableRatingButtons}
+                                disableRatingButtons={disableRatingButtons}
+                                setDisableNextButton={setDisableNextButton}
+                                disableNextButton={disableNextButton}
                             />
                         }
                     </main>
@@ -126,11 +135,27 @@ export type RatePetProps = {
     imageUrl: string,
     setNextPet: () => void,
     setRetrieveNextPet: () => void,
-    retrieveNextPet: boolean
+    retrieveNextPet: boolean,
+    nextPet: boolean,
+    setDisableRatingButtons: () => void,
+    disableRatingButtons: boolean,
+    setDisableNextButton: () => void,
+    disableNextButton: boolean
 }
 
 function RatePetView(props: RatePetProps) {
-    let {petName, imageUrl, setRetrieveNextPet, setNextPet, retrieveNextPet} = props;
+    let {
+        petName,
+        imageUrl,
+        setRetrieveNextPet,
+        setNextPet,
+        retrieveNextPet,
+        nextPet,
+        setDisableRatingButtons,
+        disableRatingButtons,
+        setDisableNextButton,
+        disableNextButton
+    } = props;
 
     return (
         <div className="row justify-content-center">
@@ -143,26 +168,39 @@ function RatePetView(props: RatePetProps) {
             <>
                 {
                     nextPet ?
-                        <DisplayPetRating setRetrieveNextPet={setRetrieveNextPet} retrieveNextPet={retrieveNextPet}/>
+                        <DisplayPetRating
+                            setRetrieveNextPet={setRetrieveNextPet}
+                            retrieveNextPet={retrieveNextPet}
+                            setDisableNextButton={setDisableNextButton}
+                            disableNextButton={disableNextButton}
+                        />
                         :
-                        <RatePetButtons setNextPet={setNextPet}/>
+                        <RatePetButtons
+                            setNextPet={setNextPet}
+                            setDisableRatingButtons={setDisableRatingButtons}
+                            disableRatingButtons={disableRatingButtons}
+                        />
                 }
             </>
         </div>
     );
 }
 
-// TODO: make retrieveNextPet true when hitting NEXT button
-// TODO: will probs need to make rading buttons disabled upon submission - same w next button
-
 export type RatePetButtonsProps = {
-    setNextPet: () => void
+    setNextPet: () => void,
+    setDisableRatingButtons: () => void,
+    disableRatingButtons: boolean
 }
 
 function RatePetButtons(props: RatePetButtonsProps) {
-    let {setNextPet} = props;
+    let {
+        setNextPet,
+        setDisableRatingButtons,
+        disableRatingButtons,
+    } = props;
 
     const onClickRatingButton = async(event: any, rating: number) => {
+        setDisableRatingButtons(true);
     //     TODO: make api call to update score using number param
         console.log(`RATING: ${rating}`)
         setNextPet(true);
@@ -175,6 +213,7 @@ function RatePetButtons(props: RatePetButtonsProps) {
                     className="btn btn-lg button-color w-100"
                     type="submit"
                     onClick={e => onClickRatingButton(e, 10)}
+                    disabled={disableRatingButtons}
                 >
                     Pet
                 </button>
@@ -183,6 +222,7 @@ function RatePetButtons(props: RatePetButtonsProps) {
                 <button className="btn btn-lg button-color w-100"
                         type="submit"
                         onClick={e => onClickRatingButton(e, 0)}
+                        disabled={disableRatingButtons}
                 >
                     Pass
                 </button>
@@ -193,13 +233,21 @@ function RatePetButtons(props: RatePetButtonsProps) {
 
 export type DisplayPetRatingProps = {
     setRetrieveNextPet: () => void,
-    retrieveNextPet: boolean
+    retrieveNextPet: boolean,
+    setDisableNextButton: () => void,
+    disableNextButton: boolean
 }
 
 function DisplayPetRating(props: DisplayPetRatingProps) {
-    let {setRetrieveNextPet, retrieveNextPet} = props;
+    let {
+        setRetrieveNextPet,
+        retrieveNextPet,
+        setDisableNextButton,
+        disableNextButton
+    } = props;
 
     const onClickNextButton = (event:any) => {
+        setDisableNextButton(true);
         setRetrieveNextPet(!retrieveNextPet);
     }
 
@@ -215,6 +263,7 @@ function DisplayPetRating(props: DisplayPetRatingProps) {
                         className="btn btn-lg button-color w-100"
                         type="submit"
                         onClick={onClickNextButton}
+                        disabled={disableNextButton}
                     >
                         Next!
                     </button>
