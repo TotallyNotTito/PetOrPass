@@ -12,18 +12,6 @@ import {v4 as uuidv4} from 'uuid';
  */
 export async function pet_routes(app: FastifyInstance): Promise<void> {
 	/**
-	 * Root route to serve landing page of app
-	 * @name get/root
-	 * @function
-	 * @returns {FastifyReply} TODO: Return description will be included after implementing react app
-	 */
-	app.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
-		// TODO: This is a placeholder static html file until we implement and serve react front end
-		reply.code(200);
-		await reply.send("successfully hit root route");
-	});
-
-	/**
 	 * Route to create new pet details in database and store pet image in file storage
 	 * @name post/pet
 	 * @function
