@@ -12,32 +12,17 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=petorpass
-
-#SAMPLE nginx default configuration for deploying server
-#  nginx:
-#    container_name: server
-#    image: nginx:latest
+#  TODO: finish implementing microservice
+#  flask:
+#    container_name: flask-pet-or-pass
+#    build: ./minio_microservice/
 #    restart: always
 #    ports:
-#      - "80:80"
-#    volumes:
-#      - server:/etc/nginx/
-
-    #network_mode: host
-#  backend:
-#    container_name: backend
-#    build: ./backend/
-#    restart: always
-#    ports:
-#      - "8080:8080"
+#      - "3000:3000
 #    environment:
-#      # Vite takes care of most of this for us, but it's good practice for other backends
-#      - VITE_DB_HOST=postgres
-#      - VITE_IP_ADDR=0.0.0.0
-#      - VITE_PORT=8080
-#      - VITE_LOGS_DIR=logs/
-#    depends_on: #This is a lie
-#      - postgres
+#      # TODO: include env vars for minio microservice
+#    depends_on:
+#      - minio
 volumes:
   db:
     driver: local
