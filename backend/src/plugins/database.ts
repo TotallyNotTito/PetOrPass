@@ -1,7 +1,7 @@
 /** @module DatabasePlugin */
 import "reflect-metadata";
 import fp from "fastify-plugin";
-import {DataSource, Repository} from "typeorm";
+import TypeORM from "typeorm";
 import {Pet} from "../db/models/pet";
 import {FastifyInstance, FastifyPluginOptions} from "fastify";
 import {AppDataSource} from "../db/datasources/dev_datasource";
@@ -14,8 +14,8 @@ declare module 'fastify' {
 }
 
 interface DBConfigOpts {
-	pet: Repository<Pet>,
-	connection: DataSource,
+	pet: TypeORM.Repository<Pet>,
+	connection: TypeORM.DataSource,
 }
 
 /**
