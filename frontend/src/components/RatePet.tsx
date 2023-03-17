@@ -14,6 +14,7 @@ export function RatePet() {
     let [nextPet, setNextPet] = useState(false);
     let [disableRatingButtons, setDisableRatingButtons] = useState(false);
     let [disableNextButton, setDisableNextButton] = useState(false);
+    let [newScore, setNewScore] = useState(0);
 
     useEffect(() => {
         // Before verifying if user is authenticated, must check if SDK is still loading
@@ -122,6 +123,9 @@ export function RatePet() {
                                 disableRatingButtons={disableRatingButtons}
                                 setDisableNextButton={setDisableNextButton}
                                 disableNextButton={disableNextButton}
+                                petId={petToRate.petId}
+                                newScore={newScore}
+                                setNewScore={setNewScore}
                             />
                         }
                     </main>
@@ -140,7 +144,10 @@ export type RatePetProps = {
     setDisableRatingButtons: () => void,
     disableRatingButtons: boolean,
     setDisableNextButton: () => void,
-    disableNextButton: boolean
+    disableNextButton: boolean,
+    petId: number,
+    newScore: number,
+    setNewScore: () => void
 }
 
 function RatePetView(props: RatePetProps) {
@@ -154,7 +161,10 @@ function RatePetView(props: RatePetProps) {
         setDisableRatingButtons,
         disableRatingButtons,
         setDisableNextButton,
-        disableNextButton
+        disableNextButton,
+        petId,
+        newScore,
+        setNewScore
     } = props;
 
     return (
@@ -173,12 +183,15 @@ function RatePetView(props: RatePetProps) {
                             retrieveNextPet={retrieveNextPet}
                             setDisableNextButton={setDisableNextButton}
                             disableNextButton={disableNextButton}
+                            newScore={newScore}
                         />
                         :
                         <RatePetButtons
                             setNextPet={setNextPet}
                             setDisableRatingButtons={setDisableRatingButtons}
                             disableRatingButtons={disableRatingButtons}
+                            petId={petId}
+                            setNewScore={setNewScore}
                         />
                 }
             </>
@@ -189,7 +202,9 @@ function RatePetView(props: RatePetProps) {
 export type RatePetButtonsProps = {
     setNextPet: () => void,
     setDisableRatingButtons: () => void,
-    disableRatingButtons: boolean
+    disableRatingButtons: boolean,
+    petId: petId,
+    setNewScore: () => void
 }
 
 function RatePetButtons(props: RatePetButtonsProps) {
@@ -197,13 +212,71 @@ function RatePetButtons(props: RatePetButtonsProps) {
         setNextPet,
         setDisableRatingButtons,
         disableRatingButtons,
+        petId,
+        setNewScore
     } = props;
+    const {logout,
+        isLoading,
+        isAuthenticated
+    } = useAuth0();
+    const {localStorageCache} = useStorage();
 
     const onClickRatingButton = async(event: any, rating: number) => {
         setDisableRatingButtons(true);
-    //     TODO: make api call to update score using number param
-        console.log(`RATING: ${rating}`)
-        setNextPet(true);
+
+        // Before verifying if user is authenticated, must check if SDK is still loading
+        while (isLoading) {}
+
+        // Verify that local storage contains token keys,
+        // and if not, log out and redirect to login page
+        const storageKeys = localStorageCache.allKeys();
+        if (storageKeys.length === 0) {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+            return;
+        }
+
+        // Verify that correct key for accessing jwt exists in local storage
+        // and if not, log out and redirect to login page
+        let foundKey = false;
+        storageKeys.forEach((key)=>{
+            if (key.includes("@@user@@")) {
+                foundKey = key;
+            }
+        })
+
+        let token;
+        if (foundKey === false) {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+            return;
+        } else {
+            token = localStorageCache.get(foundKey).id_token;
+        }
+
+        // If user is authenticated, we can call protected backend route to update pet's score after being rated
+        // If user is not authenticated, log out and redirect to login page
+        if (isAuthenticated) {
+            let result;
+            try {
+                result = await axios.put(`http://${import.meta.env.VITE_BACKEND_IP}:${import.meta.env.VITE_BACKEND_PORT}/pet-score`,
+                    {
+                        petId: petId,
+                        petRating: rating
+                    },
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+            } catch (err) {
+                // If backend route returns an error, the user will be logged out and returned to login page
+                logout({ logoutParams: { returnTo: window.location.origin } });
+            }
+
+            setNewScore(result.data.avgScore);
+            setNextPet(true);
+        } else {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+        }
     }
 
     return (
@@ -235,7 +308,8 @@ export type DisplayPetRatingProps = {
     setRetrieveNextPet: () => void,
     retrieveNextPet: boolean,
     setDisableNextButton: () => void,
-    disableNextButton: boolean
+    disableNextButton: boolean,
+    newScore: number
 }
 
 function DisplayPetRating(props: DisplayPetRatingProps) {
@@ -243,7 +317,8 @@ function DisplayPetRating(props: DisplayPetRatingProps) {
         setRetrieveNextPet,
         retrieveNextPet,
         setDisableNextButton,
-        disableNextButton
+        disableNextButton,
+        newScore
     } = props;
 
     const onClickNextButton = (event:any) => {
@@ -251,11 +326,10 @@ function DisplayPetRating(props: DisplayPetRatingProps) {
         setRetrieveNextPet(!retrieveNextPet);
     }
 
-    // TODO: replace PLACEHOLDER with new rating
     return (
         <>
             <div className="row text-center">
-                <legend>Average Rating: PLACEHOLDER</legend>
+                <legend>Average Rating: {newScore}</legend>
             </div>
             <div className="row mt-4 mb-5 justify-content-center">
                 <div className="col-6 col-md-4 col-lg-3 col-xl-2">
