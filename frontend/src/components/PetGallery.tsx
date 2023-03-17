@@ -13,10 +13,7 @@ export function PetGallery() {
 
     useEffect(() => {
         // Before verifying if user is authenticated, must check if SDK is still loading
-        // If still loading, exit useEffect, then wait for isLoading state to change and trigger another call to useEffect
-        if (isLoading) {
-            return;
-        }
+        while (isLoading) {}
 
         // Verify that local storage contains token keys,
         // and if not, log out and redirect to login page
@@ -76,7 +73,6 @@ export function PetGallery() {
                 }
 
                 // Upon successful reply from server, display list of pets submitted by user
-                // TODO: create type for list of props being created here - and for being used below in return fxn
                 let pets = [];
                 result.data.forEach((item) => {
                     pets.push({
@@ -87,8 +83,6 @@ export function PetGallery() {
                     });
                 });
 
-                console.log(pets)
-
                 setPetList(pets);
                 setEmptyGallery(false);
             }
@@ -97,7 +91,7 @@ export function PetGallery() {
         } else {
             logout({ logoutParams: { returnTo: window.location.origin } });
         }
-    }, [isLoading]);
+    });
 
     return (
         <>
@@ -121,7 +115,6 @@ export function PetGallery() {
     );
 }
 
-// TODO: do i need to move type definitions elsewhere?
 export type PetProfileProps = {
     petName: string,
     avgScore: number,

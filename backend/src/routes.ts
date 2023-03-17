@@ -83,11 +83,9 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 		} else {
 			statusCode = 200;
 			pet = {
+				pet_id: dbResult.id,
 				pet_name: dbResult.pet_name,
-				image_name: formatImagePath(dbResult.image_name),
-				total_score: dbResult.total_score,
-				total_votes: dbResult.total_votes,
-				submitted_by: dbResult.submitted_by
+				image_name: formatImagePath(dbResult.image_name)
 			};
 		}
 
