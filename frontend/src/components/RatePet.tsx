@@ -8,9 +8,10 @@ import {useStorage} from "../services/StorageService";
 export function RatePet() {
     const {localStorageCache} = useStorage();
     const {logout, isLoading, isAuthenticated} = useAuth0();
-    let [nextPet, setNextPet] = useState(false);
+    let [retrieveNextPet, setRetrieveNextPet] = useState(false);
     let [emptyPets, setEmptyPets] = useState(false);
     let [petToRate, setPetToRate] = useState({});
+    let [nextPet, setNextPet] = useState(false);
 
     useEffect(() => {
         // Before verifying if user is authenticated, must check if SDK is still loading
@@ -79,17 +80,16 @@ export function RatePet() {
                     imageUrl: result.data.image_name
                 };
 
-                console.log(pet)
-
                 setPetToRate(pet);
                 setEmptyPets(false);
+                setNextPet(false);
             }
 
             getPet();
         } else {
             logout({ logoutParams: { returnTo: window.location.origin } });
         }
-    }, [nextPet])
+    }, [retrieveNextPet])
 
     return (
         <>
@@ -104,7 +104,17 @@ export function RatePet() {
                         <div className="row text-center mb-4">
                             <legend>Would you pet it or will you take a pass?</legend>
                         </div>
-                        {Object.keys(petToRate).length === 0 ? <></> : <RatePetView petName={petToRate.petName} imageUrl={petToRate.imageUrl} />}
+                        {Object.keys(petToRate).length === 0 ?
+                            <></>
+                            :
+                            <RatePetView
+                                petName={petToRate.petName}
+                                imageUrl={petToRate.imageUrl}
+                                setNextPet={setNextPet}
+                                setRetrieveNextPet={setRetrieveNextPet}
+                                retrieveNextPet={retrieveNextPet}
+                            />
+                        }
                     </main>
             }
         </>
@@ -113,11 +123,14 @@ export function RatePet() {
 
 export type RatePetProps = {
     petName: string,
-    imageUrl: string
+    imageUrl: string,
+    setNextPet: () => void,
+    setRetrieveNextPet: () => void,
+    retrieveNextPet: boolean
 }
 
 function RatePetView(props: RatePetProps) {
-    let {petName, imageUrl} = props;
+    let {petName, imageUrl, setRetrieveNextPet, setNextPet, retrieveNextPet} = props;
 
     return (
         <div className="row justify-content-center">
@@ -127,8 +140,86 @@ function RatePetView(props: RatePetProps) {
             <div className="row text-center mt-4">
                 <legend>{petName}</legend>
             </div>
+            <>
+                {
+                    nextPet ?
+                        <DisplayPetRating setRetrieveNextPet={setRetrieveNextPet} retrieveNextPet={retrieveNextPet}/>
+                        :
+                        <RatePetButtons setNextPet={setNextPet}/>
+                }
+            </>
         </div>
     );
 }
 
+// TODO: make retrieveNextPet true when hitting NEXT button
+// TODO: will probs need to make rading buttons disabled upon submission - same w next button
 
+export type RatePetButtonsProps = {
+    setNextPet: () => void
+}
+
+function RatePetButtons(props: RatePetButtonsProps) {
+    let {setNextPet} = props;
+
+    const onClickRatingButton = async(event: any, rating: number) => {
+    //     TODO: make api call to update score using number param
+        console.log(`RATING: ${rating}`)
+        setNextPet(true);
+    }
+
+    return (
+        <div className="row mt-4 mb-5 justify-content-center">
+            <div className="col-6 col-md-4 col-lg-3 col-xl-2">
+                <button
+                    className="btn btn-lg button-color w-100"
+                    type="submit"
+                    onClick={e => onClickRatingButton(e, 10)}
+                >
+                    Pet
+                </button>
+            </div>
+            <div className="col-6 col-md-4 col-lg-3 col-xl-2">
+                <button className="btn btn-lg button-color w-100"
+                        type="submit"
+                        onClick={e => onClickRatingButton(e, 0)}
+                >
+                    Pass
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export type DisplayPetRatingProps = {
+    setRetrieveNextPet: () => void,
+    retrieveNextPet: boolean
+}
+
+function DisplayPetRating(props: DisplayPetRatingProps) {
+    let {setRetrieveNextPet, retrieveNextPet} = props;
+
+    const onClickNextButton = (event:any) => {
+        setRetrieveNextPet(!retrieveNextPet);
+    }
+
+    // TODO: replace PLACEHOLDER with new rating
+    return (
+        <>
+            <div className="row text-center">
+                <legend>Average Rating: PLACEHOLDER</legend>
+            </div>
+            <div className="row mt-4 mb-5 justify-content-center">
+                <div className="col-6 col-md-4 col-lg-3 col-xl-2">
+                    <button
+                        className="btn btn-lg button-color w-100"
+                        type="submit"
+                        onClick={onClickNextButton}
+                    >
+                        Next!
+                    </button>
+                </div>
+            </div>
+        </>
+    );
+}
