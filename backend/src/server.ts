@@ -10,6 +10,9 @@ import logger from "./lib/logger";
 import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
 import fastifyAuth0 from 'fastify-auth0-verify';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
@@ -74,15 +77,23 @@ export async function buildApp(useLogging: boolean) {
  */
 export async function listen(app: FastifyInstance) {
 	try {
+
+		let host = import.meta.env.VITE_IP_ADDR;
+		let port = Number(import.meta.env.VITE_PORT);
+
+		console.log(`In listen with host:port: ${host}:${port}`);
 		await app.listen({ // Config object is optional and defaults to { host: 'localhost', port: 3000 }
-			host: import.meta.env.VITE_IP_ADDR,
-			port: Number(import.meta.env.VITE_PORT),
+			host,
+			port,
 		}, (err: any) => {  // Listen handler doesn't need to do much except report errors!
+
 			if (err) {
+				console.log("1");
 				app.log.error(err);
 			}
 		});
 	} catch (err) { // This will catch any errors that further bubble up from listen(), should be unnecessary
+		console.log("2");
 		app.log.error(err);
 	}
 }

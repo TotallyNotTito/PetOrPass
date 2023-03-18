@@ -43,4 +43,3 @@ const DbPlugin = fp(async (app: FastifyInstance, options: FastifyPluginOptions, 
 });
 
 export default DbPlugin;
-
