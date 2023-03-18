@@ -15,6 +15,8 @@ export class PetSeeder extends Seeder {
 
 	/**
      * Runs the Pets table's seed
+	 * Seeder should only be used for backend testing as-is,
+	 * 	but to use seeder for frontend testing, images with names that match the seeded image names must be manually input into MinIO instance
      * @function
      * @param {FastifyInstance} app
      * @returns {Promise<void>}

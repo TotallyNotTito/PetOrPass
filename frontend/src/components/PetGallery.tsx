@@ -13,10 +13,7 @@ export function PetGallery() {
 
     useEffect(() => {
         // Before verifying if user is authenticated, must check if SDK is still loading
-        // If still loading, exit useEffect, then wait for isLoading state to change and trigger another call to useEffect
-        if (isLoading) {
-            return;
-        }
+        while (isLoading) {}
 
         // Verify that local storage contains token keys,
         // and if not, log out and redirect to login page
@@ -76,16 +73,16 @@ export function PetGallery() {
                 }
 
                 // Upon successful reply from server, display list of pets submitted by user
-                // TODO: create type for list of props being created here - and for being used below in return fxn
                 let pets = [];
                 result.data.forEach((item) => {
                     pets.push({
-                        petId: item.id,
+                        petId: item.pet_id,
                         petName: item.pet_name,
                         imageUrl: item.image_name,
                         avgScore: item.total_votes === 0 ? 0 : (item.total_score / item.total_votes).toFixed(2)
                     });
                 });
+
                 setPetList(pets);
                 setEmptyGallery(false);
             }
@@ -94,15 +91,51 @@ export function PetGallery() {
         } else {
             logout({ logoutParams: { returnTo: window.location.origin } });
         }
-    }, [isLoading]);
+    });
 
     return (
         <>
             {
                 emptyGallery ?
                     <ErrorMessage errorMessage="uh-oh! Looks like you have not submitted any pets yet for rating! You can submit your first pet by visiting the Submit Pet tab." />
-                    : <ul className="below-navbar">{petList.map((pet) => <li key={pet.petId}>{pet.petName} - {pet.avgScore} - {pet.imageUrl}</li>)}</ul>
+                    :
+                    <main className="container below-navbar">
+                        <div className="row text-center">
+                            <h1>Pet Gallery</h1>
+                        </div>
+                        <div className="row text-center mb-5">
+                            <legend>View all of the pets you submitted that were rated by other users</legend>
+                        </div>
+                        <div className="row align-items-center justify-content-center">
+                            {petList.map((pet) => <PetProfile key={pet.petId} petName={pet.petName} avgScore={pet.avgScore} imageUrl={pet.imageUrl} />)}
+                        </div>
+                    </main>
             }
         </>
+    );
+}
+
+export type PetProfileProps = {
+    petName: string,
+    avgScore: number,
+    imageUrl: string
+}
+
+function PetProfile(props: PetProfileProps) {
+    let {petName, avgScore, imageUrl} = props;
+
+    return (
+        <div className="col">
+            <div className="card card-width mb-5 mx-auto">
+                <img src={imageUrl}
+                     className="card-img-top"
+                     alt={`Photo of ${petName}`}
+                />
+                <div className="card-body">
+                    <h5 className="card-title">{petName}</h5>
+                    <p className="card-text">Pet or Pass Score: {avgScore}</p>
+                </div>
+            </div>
+        </div>
     );
 }

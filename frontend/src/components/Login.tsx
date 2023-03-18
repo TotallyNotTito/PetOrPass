@@ -11,7 +11,8 @@ export function Login() {
                 <div className="top col-12 col-md-9 col-lg-6 col-xl-5">
                     <img src={catImage}
                          className="img-fluid"
-                         alt="Photo of a white cat" />
+                         alt="Photo of a white cat"
+                    />
                 </div>
                 <div className="col col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <div className="row align-items-center justify-content-center mt-4">

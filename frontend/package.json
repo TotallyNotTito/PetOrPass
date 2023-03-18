@@ -8,8 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "prod": "vitest run && vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
