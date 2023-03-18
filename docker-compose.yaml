@@ -1,17 +1,5 @@
 version: '3'
 services:
-  postgres:
-    container_name: postgres-pet-or-pass
-    image: postgres:15-alpine
-    restart: always
-    ports:
-      - "5432:5432" 
-    volumes:
-      - db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=petorpass
   backend:
     container_name: backend-pet-or-pass
     build: ./backend/
@@ -19,7 +7,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Vite takes care of most of this for us, but it's good practice for other backends
       - VITE_DB_HOST=127.0.0.1
       - VITE_IP_ADDR=0.0.0.0
       - VITE_PORT=8080
@@ -32,6 +19,34 @@ services:
       - VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
     depends_on:
       - postgres
+
+  frontend:
+    container_name: frontend-pet-or-pass
+    build: ./frontend/
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_IP=127.0.0.1
+      - VITE_BACKEND_PORT=8080
+      - VITE_IP_ADDR=localhost
+      - VITE_PORT=5173
+      - VITE_AUTH0_DOMAIN=dev-aevxtb882nkyrbhe.us.auth0.com
+      - VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
+
+  postgres:
+    container_name: postgres-pet-or-pass
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=petorpass
+
 #  TODO: finish implementing microservice
 #  flask:
 #    container_name: flask-pet-or-pass
@@ -43,6 +58,7 @@ services:
 #      # TODO: include env vars for minio microservice
 #    depends_on:
 #      - minio
+
 volumes:
   db:
     driver: local
