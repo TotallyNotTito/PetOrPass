@@ -5,6 +5,7 @@ import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
 import {formatImagePath} from "./lib/helpers";
 import {v4 as uuidv4} from 'uuid';
+import axios from 'axios';
 
 /**
  * App plugin where we construct our routes
