@@ -41,7 +41,7 @@ COPY --chown=nodejs:nodejs . .
 
 # build/pack binaries from sources
 RUN pnpm build
-RUN pnpm migration:run
+#RUN pnpm migration:run
 
 # exposed port
 EXPOSE 8080

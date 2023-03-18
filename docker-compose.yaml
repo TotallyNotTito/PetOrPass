@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - VITE_DB_HOST=127.0.0.1
+      - VITE_DB_HOST=postgres
       - VITE_IP_ADDR=0.0.0.0
       - VITE_PORT=8080
       - VITE_LOGS_DIR=logs/
@@ -19,6 +19,10 @@ services:
       - VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
     depends_on:
       - postgres
+#      postgres:
+#        condition: service_healthy
+#    networks:
+#      - petorpass
 
   frontend:
     container_name: frontend-pet-or-pass
@@ -46,6 +50,13 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=petorpass
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready", "-U", "admin"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+  #    networks:
+  #      - petorpass
 
 #  TODO: finish implementing microservice
 #  flask:
@@ -56,8 +67,11 @@ services:
 #      - "3000:3000
 #    environment:
 #      # TODO: include env vars for minio microservice
+#      be sure to refer to minio as minio, not localhose
 #    depends_on:
 #      - minio
+#    networks:
+#      - petorpass
 
   minio:
     container_name: minio-pet-or-pass
@@ -73,9 +87,14 @@ services:
       - MINIO_SERVER_SECRET_KEY=minioPass
     volumes:
       - minio_data:/data
+#    networks:
+#      - petorpass
 
 volumes:
   minio_data:
     driver: local
   db:
     driver: local
+
+#networks:
+#  petorpass:
