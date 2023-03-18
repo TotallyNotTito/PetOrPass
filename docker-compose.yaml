@@ -1,5 +1,23 @@
-version: '3'
+version: "3.9"
 services:
+  postgres:
+    container_name: postgres-pet-or-pass
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=petorpass
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U admin -d petorpass" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+
   backend:
     container_name: backend-pet-or-pass
     build: ./backend/
@@ -20,9 +38,7 @@ services:
     depends_on:
       - postgres
 #      postgres:
-#        condition: service_healthy
-#    networks:
-#      - petorpass
+#        condition: service_completed_successfully
 
   frontend:
     container_name: frontend-pet-or-pass
@@ -38,26 +54,6 @@ services:
       - VITE_AUTH0_DOMAIN=dev-aevxtb882nkyrbhe.us.auth0.com
       - VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
 
-  postgres:
-    container_name: postgres-pet-or-pass
-    image: postgres:15-alpine
-    restart: always
-    ports:
-      - "5432:5432"
-    volumes:
-      - db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=petorpass
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready", "-U", "admin"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-  #    networks:
-  #      - petorpass
-
 #  TODO: finish implementing microservice
 #  flask:
 #    container_name: flask-pet-or-pass
@@ -70,8 +66,6 @@ services:
 #      be sure to refer to minio as minio, not localhose
 #    depends_on:
 #      - minio
-#    networks:
-#      - petorpass
 
   minio:
     container_name: minio-pet-or-pass
@@ -87,14 +81,9 @@ services:
       - MINIO_SERVER_SECRET_KEY=minioPass
     volumes:
       - minio_data:/data
-#    networks:
-#      - petorpass
 
 volumes:
   minio_data:
     driver: local
   db:
     driver: local
-
-#networks:
-#  petorpass:
