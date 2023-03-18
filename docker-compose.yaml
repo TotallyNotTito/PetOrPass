@@ -12,11 +12,6 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=petorpass
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -U admin -d petorpass" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
 
   backend:
     container_name: backend-pet-or-pass
@@ -37,8 +32,6 @@ services:
       - VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
     depends_on:
       - postgres
-#      postgres:
-#        condition: service_completed_successfully
 
   frontend:
     container_name: frontend-pet-or-pass

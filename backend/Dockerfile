@@ -42,13 +42,11 @@ COPY --chown=nodejs:nodejs . .
 # build/pack binaries from sources
 RUN pnpm build
 
-#RUN while ! nc -z postgres 5432; do; sleep 1; done
-#RUN pnpm migration:run
+# wait until postgres is accepting requests before running migrations
+RUN while ! nc -z postgres 5432; do sleep 1; done
+RUN pnpm migration:run
 
 # exposed port
 EXPOSE 8080
 
-#CMD [ "node", "./build/index.js" ]
-
-ADD start.sh ./start.sh
-CMD ["bash", "./start.sh"]
+CMD [ "node", "./build/index.js" ]
