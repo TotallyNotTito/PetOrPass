@@ -59,6 +59,23 @@ services:
 #    depends_on:
 #      - minio
 
+  minio:
+    container_name: minio-pet-or-pass
+    image: docker.io/bitnami/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_DEFAULT_BUCKETS=petorpass:public
+      - MINIO_ROOT_USER=minioUser
+      - MINIO_ROOT_PASSWORD=minioPass
+      - MINIO_SERVER_ACCESS_KEY=minioUser
+      - MINIO_SERVER_SECRET_KEY=minioPass
+    volumes:
+      - minio_data:/data
+
 volumes:
+  minio_data:
+    driver: local
   db:
     driver: local
