@@ -1,7 +1,6 @@
 /** @module Server */
 
-// This will let us use our basic middlewares now, then transition to hooks later
-import fastifyMiddie from "@fastify/middie";
+import cors from "@fastify/cors";
 import staticFiles from "@fastify/static";
 import multipart from "@fastify/multipart";
 import Fastify, {FastifyInstance} from "fastify";
@@ -10,6 +9,10 @@ import {getDirName} from "./lib/helpers";
 import logger from "./lib/logger";
 import {pet_routes} from "./routes";
 import DbPlugin from "./plugins/database";
+import fastifyAuth0 from 'fastify-auth0-verify';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 /**
  * This is our main "Create App" function.  Note that it does NOT start the server, this only creates it
@@ -26,11 +29,15 @@ export async function buildApp(useLogging: boolean) {
 		: Fastify({logger: false});
 
 	try {
-		// add express-like 'app.use' middleware support
-		await app.register(fastifyMiddie);
+		// add support for cors
+		await app.register(cors, {
+			origin: (origin, cb) => {
+				cb(null, true);
+			}
+		});
 
 		// add support for multipart content type
-		await app.register(multipart);
+		await app.register(multipart, {limits: {fileSize: 2000000000}});
 
 		// add static file handling
 		await app.register(staticFiles, {
@@ -38,8 +45,15 @@ export async function buildApp(useLogging: boolean) {
 			prefix: "/public/",
 		});
 
+		// adding auth protection to the routes
+		app.log.info("Registering Auth0...");
+		await app.register(fastifyAuth0, {
+			domain: import.meta.env.VITE_AUTH0_DOMAIN,
+			audience: import.meta.env.VITE_AUTH0_CLIENT_ID
+		});
+
 		// Adds all of our Router's routes to the app
-		app.log.info("Registering routes");
+		app.log.info("Registering routes...");
 		await app.register(pet_routes);
 
 		// Connects to postgres
@@ -63,15 +77,23 @@ export async function buildApp(useLogging: boolean) {
  */
 export async function listen(app: FastifyInstance) {
 	try {
+
+		let host = import.meta.env.VITE_IP_ADDR;
+		let port = Number(import.meta.env.VITE_PORT);
+
+		console.log(`In listen with host:port: ${host}:${port}`);
 		await app.listen({ // Config object is optional and defaults to { host: 'localhost', port: 3000 }
-			host: import.meta.env.VITE_IP_ADDR,
-			port: Number(import.meta.env.VITE_PORT),
+			host,
+			port,
 		}, (err: any) => {  // Listen handler doesn't need to do much except report errors!
+
 			if (err) {
+				console.log("1");
 				app.log.error(err);
 			}
 		});
 	} catch (err) { // This will catch any errors that further bubble up from listen(), should be unnecessary
+		console.log("2");
 		app.log.error(err);
 	}
 }

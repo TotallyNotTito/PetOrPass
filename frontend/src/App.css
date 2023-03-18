@@ -29,3 +29,11 @@
 .card-width {
     width: 18rem;
 }
+
+.success-text {
+    color: var(--bs-success);
+}
+
+.error-text {
+    color: var(--bs-danger);
+}

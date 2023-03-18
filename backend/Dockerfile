@@ -1,32 +1,52 @@
-FROM node:18-alpine AS base
+FROM node:lts-slim as builder
 
-# TODO: replace http-server
-RUN npm i -g pnpm http-server
+# update packages, to reduce risk of vulnerabilities
+RUN apt-get update && apt-get upgrade -y && apt-get autoclean -y && apt-get autoremove -y && apt-get install -y netcat
+RUN npm install -g pnpm
 
-# Stage 1 - download and prep dependencies
-FROM base AS dependencies
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+# set a non privileged user to use when running this image
+RUN groupadd -r nodejs && useradd -g nodejs -s /bin/bash -d /home/nodejs -m nodejs
+# Become that user
+USER nodejs
+# set secure folder permissions
+RUN mkdir -p /home/nodejs/app/node_modules && chown -R nodejs:nodejs /home/nodejs/app
+
+WORKDIR /home/nodejs/app
+
+# set default node env
+ARG NODE_ENV=development
+# ARG NODE_ENV=production # to be able to run tests (for example in CI), do not set production as environment
+ENV NODE_ENV=${NODE_ENV}
+
+ENV NPM_CONFIG_LOGLEVEL=info
+ENV VITE_IP_ADDR=0.0.0.0
+ENV VITE_PORT=8080
+ENV VITE_LOGS_DIR=logs/
+ENV VITE_DB_HOST=postgres
+ENV VITE_DB_PORT=5432
+ENV VITE_DB_USER=admin
+ENV VITE_DB_PASS=password
+ENV VITE_DB_NAME=petorpass
+ENV VITE_AUTH0_DOMAIN=dev-aevxtb882nkyrbhe.us.auth0.com
+ENV VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
+
+# copy project definition/dependencies files, for better reuse of layers
+COPY --chown=nodejs:nodejs package*.json ./
+
+# install dependencies here, for better reuse of layers
 RUN pnpm install
 
-# Stage 2 - Build project after copying deps from S1
-FROM base AS build
-WORKDIR /app
-COPY . .
-COPY --from=dependencies /app/node_modules ./node_modules
-RUN pnpm build
-RUN pnpm prune --prod
+# copy all sources in the container (exclusions in .dockerignore file)
+COPY --chown=nodejs:nodejs . .
 
-# Stage 3 - Deploy after copying build
-FROM base AS deploy
-WORKDIR /app
-COPY --from=build /app/build/ ./build/
-COPY --from=build /app/node_modules/ ./node_modules/
-# TODO: Replace this with a "real" http server (nginx) before prod!
+# build/pack binaries from sources
+RUN pnpm build
+
+# wait until postgres is accepting requests before running migrations
+RUN while ! nc -z postgres 5432; do sleep 1; done
+RUN pnpm migration:run
+
+# exposed port
 EXPOSE 8080
 
-WORKDIR /app/build
-# This can be overridden with `docker run -it petorpass/backend /bin/sh
-# Later will be removed, as this will be served by nginx
-CMD [ "http-server", "-p",  "8080", "." ]
-
+CMD [ "node", "./build/index.js" ]

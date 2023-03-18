@@ -1,0 +1,84 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: postgres-pet-or-pass
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=petorpass
+
+  backend:
+    container_name: backend-pet-or-pass
+    build: ./backend/
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - VITE_DB_HOST=postgres
+      - VITE_IP_ADDR=0.0.0.0
+      - VITE_PORT=8080
+      - VITE_LOGS_DIR=logs/
+      - VITE_DB_PORT=5432
+      - VITE_DB_USER=admin
+      - VITE_DB_PASS=password
+      - VITE_DB_NAME=petorpass
+      - VITE_AUTH0_DOMAIN=dev-aevxtb882nkyrbhe.us.auth0.com
+      - VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
+    depends_on:
+      - postgres
+
+  frontend:
+    container_name: frontend-pet-or-pass
+    build: ./frontend/
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_IP=127.0.0.1
+      - VITE_BACKEND_PORT=8080
+      - VITE_IP_ADDR=localhost
+      - VITE_PORT=5173
+      - VITE_AUTH0_DOMAIN=dev-aevxtb882nkyrbhe.us.auth0.com
+      - VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
+
+  minio:
+    container_name: minio-pet-or-pass
+    image: docker.io/bitnami/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_DEFAULT_BUCKETS=petorpass:public
+      - MINIO_ROOT_USER=minioUser
+      - MINIO_ROOT_PASSWORD=minioPass
+      - MINIO_SERVER_ACCESS_KEY=minioUser
+      - MINIO_SERVER_SECRET_KEY=minioPass
+    volumes:
+      - minio_data:/data
+
+#  TODO: finish implementing microservice
+#  flask:
+#    container_name: flask-pet-or-pass
+#    build: ./minio_microservice/
+#    restart: always
+#    ports:
+#      - "3000:3000
+#    environment:
+#      # TODO: include env vars for minio microservice
+#      be sure to refer to minio as minio, not localhose
+#    depends_on:
+#      - minio
+
+x
+
+volumes:
+  minio_data:
+    driver: local
+  db:
+    driver: local
