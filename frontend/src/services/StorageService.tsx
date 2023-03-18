@@ -16,7 +16,7 @@ export const StorageProvider = ({children}) => {
     );
 }
 
-const StorageContext = createContext(null);
+export const StorageContext = createContext(null);
 
 export const useStorage = () => {
     return useContext(StorageContext);
