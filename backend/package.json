@@ -67,6 +67,7 @@
     "@types/cors": "^2.8.13",
     "@types/node": "^18.11.18",
     "@types/supertest": "^2.0.12",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "@vitest/coverage-c8": "^0.28.3",
