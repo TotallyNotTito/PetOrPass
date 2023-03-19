@@ -2,14 +2,13 @@
 
 import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
 import {Pet} from "./db/models/pet";
-import {faker} from "@faker-js/faker";
 import {formatImagePath} from "./lib/helpers";
 import {v4 as uuidv4} from 'uuid';
 import axios from 'axios';
 import FormData from 'form-data';
 import fs from 'fs';
 import util from 'util';
-import { pipeline } from 'stream';
+import {pipeline} from 'stream';
 
 /**
  * App plugin where we construct our routes
