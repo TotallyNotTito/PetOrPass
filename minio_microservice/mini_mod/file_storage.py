@@ -3,23 +3,28 @@ from minio import Minio
 class FileDumper():
     
     def __init__(self, config):
-        self.client = Minio(endpoint=config["endpoint"],
-                            access_key=config["access_key"],
-                            secret_key=config["secret_key"],
-                            secure=config["secure"])
+        self.client = Minio(endpoint = config["endpoint"],
+                            access_key = config["access_key"],
+                            secret_key = config["secret_key"],
+                            secure = config["secure"])
+        self.bucket = config["bucket"]
 
-    def add_image(self, path, name):
-        found = self.client.bucket_exists(f'{self.bucket}')
-        print(f'Found response: {found}')
-        if not found:
-            print(f'making bucket: {self.bucket}')
-            self.client.make_bucket(self.bucket)
-        else:
-            print(f'Bucket: {self.bucket} already exists')
+    # Method to store an image into a bucket in the MinIO instance
+    def add_image(self, file_name, image, file_size):
+        success = True
 
-        self.client.fput_object(
-            f'{name}', f'{self.bucket}', f'{path}',
-        )
+        try:
+            self.client.put_object(bucket_name = self.bucket,
+                                   object_name = file_name,
+                                   data = image,
+                                   length = file_size)
+        except Exception as e:
+            print(e)
+            success = False
+
+        return success
+
+
     
     def show_pets(self):
         objects = self.client.list_objects(self.bucket)
