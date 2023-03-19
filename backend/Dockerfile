@@ -46,7 +46,7 @@ COPY --chown=nodejs:nodejs . .
 RUN pnpm build
 
 # wait until postgres is accepting requests before running migrations
-RUN while ! nc -z postgres 5432; do sleep 1; done
+RUN while ! nc -z postgres 5432; do sleep 5; done
 RUN pnpm migration:run
 
 # exposed port
