@@ -65,22 +65,22 @@ services:
     volumes:
       - minio_data:/data
 
-  flask:
-    container_name: flask-pet-or-pass
-    build: ./minio_microservice/
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - FLASK_PORT=3000
-      - FLASK_HOST=0.0.0.0
-      - MINIO_HOST=minio
-      - MINIO_PORT=9000
-      - MINIO_ACCESS_KEY=minioUser
-      - MINIO_SECRET_KEY=minioPass
-      - MINIO_BUCKET=petorpass
-    depends_on:
-      - minio
+#  flask:
+#    container_name: flask-pet-or-pass
+#    build: ./minio_microservice/
+#    restart: always
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      - FLASK_PORT=3000
+#      - FLASK_HOST=0.0.0.0
+#      - MINIO_HOST=minio
+#      - MINIO_PORT=9000
+#      - MINIO_ACCESS_KEY=minioUser
+#      - MINIO_SECRET_KEY=minioPass
+#      - MINIO_BUCKET=petorpass
+#    depends_on:
+#      - minio
 
 volumes:
   minio_data:
