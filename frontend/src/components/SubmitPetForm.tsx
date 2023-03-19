@@ -106,7 +106,7 @@ export function SubmitPetForm() {
             <div className="row mt-3 justify-content-center">
                 <div className="col-xl-4 col-md-6 col-sm-8 col-10">
                     <label className="form-label" htmlFor="petNameInput">Pet Name</label>
-                    <input className="form-control" 
+                    <input className="form-control"
                            onChange={pn => onChangePetName(pn)}
                            value={petName}
                            type="text"
@@ -133,7 +133,9 @@ export function SubmitPetForm() {
                     <button className="btn btn-lg button-color w-100"
                             onClick={onSubmitPet}
                             type="submit"
-                            disabled={disableButton || petName === '' || petImage === null || imageInputField.current.value === ''}>Submit!</button>
+                            disabled={disableButton || petName === '' || petImage === null || imageInputField.current.value === ''}>
+                        Submit!
+                    </button>
                 </div>
             </div>
         </form>

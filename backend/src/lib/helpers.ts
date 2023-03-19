@@ -9,8 +9,7 @@ import {fileURLToPath} from 'url';
  * @returns {string} URL to access pet image
  */
 export function formatImagePath(imageName: string) {
-	// 	TODO: replace placeholder url with real url once MinIO file storage implemented
-	return `http://PLACEHOLDER/my_bucket/${imageName}`;
+	return `http://${import.meta.env.VITE_FLASK_HOST}:${import.meta.env.VITE_MINIO_MICROSERVICE_PORT}/get-image/${imageName}`;
 }
 
 /**

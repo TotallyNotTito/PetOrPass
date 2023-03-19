@@ -91,7 +91,7 @@ export function PetGallery() {
         } else {
             logout({ logoutParams: { returnTo: window.location.origin } });
         }
-    });
+    }, []);
 
     return (
         <>

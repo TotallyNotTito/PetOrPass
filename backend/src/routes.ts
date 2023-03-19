@@ -5,6 +5,11 @@ import {Pet} from "./db/models/pet";
 import {faker} from "@faker-js/faker";
 import {formatImagePath} from "./lib/helpers";
 import {v4 as uuidv4} from 'uuid';
+import axios from 'axios';
+import FormData from 'form-data';
+import fs from 'fs';
+import util from 'util';
+import { pipeline } from 'stream';
 
 /**
  * App plugin where we construct our routes
@@ -31,6 +36,7 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 			const fileExtension = fileName[fileName.length - 1];
 			const imageName = `${uuidv4()}-${Date.now()}.${fileExtension}`;
 
+			// Store pet in database
 			const pet = new Pet();
 			pet.pet_name = petName.value;
 			pet.image_name = imageName;
@@ -39,8 +45,28 @@ export async function pet_routes(app: FastifyInstance): Promise<void> {
 			pet.submitted_by = submittedBy.value;
 			await pet.save();
 
-			// TODO: Pet image will be saved to MinIO file storage with new name once file storage implemented
-			// data.file will contain the actual file we want to send to minio
+			// Store pet image in MinIO via Flask microservice
+			const formData = new FormData();
+			formData.append("imageName", imageName);
+			const pump = util.promisify(pipeline);
+			await pump(data.file, fs.createWriteStream(imageName));
+			formData.append('imageFile', fs.createReadStream(imageName));
+			const uri = `http://${import.meta.env.VITE_MINIO_MICROSERVICE_IP}:${import.meta.env.VITE_MINIO_MICROSERVICE_PORT}/store-image`;
+
+			try {
+				await axios.post(uri, formData, {headers: formData.getHeaders()});
+			} catch(error) {
+				// If Flask microservice route returns an error, log it, but still return 201 to frontend
+				// The image alt text will display in the UI in the event that a pet photo produces an error when stored
+				app.log.error(error);
+			}
+
+			try {
+				// Delete temporary local file
+				fs.unlinkSync(imageName);
+			} catch(error) {
+				app.log.error(error);
+			}
 
 			reply.code(201);
 			await reply.send();
