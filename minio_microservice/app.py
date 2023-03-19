@@ -1,20 +1,26 @@
 from dotenv import load_dotenv
 import flask, os
 from flask import request
-# from mini_mod.file_storage import FileDumper, S3Error
+from mini_mod.file_storage import FileDumper
 
-# TODO: is this going to be an issue with dockerfile env vars?
 # Load env variables from .env
 load_dotenv()
-# client = FileDumper(bucket='pet-images')
-
+minio_config = {
+    "endpoint": f"{os.environ.get('MINIO_HOST')}:{os.environ.get('MINIO_PORT')}",
+    "secure": False,
+    "access_key": os.environ.get("MINIO_ACCESS_KEY"),
+    "secret_key": os.environ.get("MINIO_SECRET_KEY")
+}
+minio_client = FileDumper(minio_config)
 app = flask.Flask(__name__)
 
 @app.route("/store-image", methods=["POST"])
 def store_image():
     image_name = request.form["imageName"]
     image_file = request.files["imageFile"]
-    image_file.save(image_name)
+
+
+#     image_file.save(image_name)
 
 
 
@@ -22,4 +28,4 @@ def store_image():
     return {"temporary": "response"}
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT")))
+    app.run(host=os.environ.get("FLASK_HOST"), port=int(os.environ.get("FLASK_PORT")))
