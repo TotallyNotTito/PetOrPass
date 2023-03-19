@@ -24,8 +24,18 @@ class FileDumper():
 
         return success
 
+    # Method to retrieve an image in a bucket on the MinIO instance
+    def retrieve_image(self, file_name):
+        data = None
+        headers = None
 
-    
-    def show_pets(self):
-        objects = self.client.list_objects(self.bucket)
-        return objects if objects else None
+        try:
+            response = self.client.get_object(bucket_name = self.bucket, object_name = file_name)
+            data = response.data
+            headers = response.getheaders()
+
+        finally:
+            response.close()
+            response.release_conn()
+
+        return (headers, data)

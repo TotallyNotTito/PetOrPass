@@ -17,6 +17,7 @@ interface ImportMetaEnv {
 	readonly VITE_AUTH0_CLIENT_ID: string;
 	readonly VITE_MINIO_MICROSERVICE_IP: string;
 	readonly VITE_MINIO_MICROSERVICE_PORT: number;
+	readonly VITE_FLASK_HOST: string;
 }
 
 interface ImportMeta {
