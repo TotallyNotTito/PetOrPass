@@ -30,8 +30,8 @@ export function RatePet() {
 
         // Verify that correct key for accessing jwt exists in local storage
         // and if not, log out and redirect to login page
-        let foundKey = false;
-        storageKeys.forEach((key)=>{
+        let foundKey: string | boolean = false;
+        storageKeys.forEach((key: string)=>{
             if (key.includes("@@user@@")) {
                 foundKey = key;
             }
