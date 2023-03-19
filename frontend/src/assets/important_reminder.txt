@@ -1,2 +1,0 @@
-TODO: when importing files from assets directory, should look like this: ./assets/image.svg or ../assets/image.svg
-            *can delete this temporary file once have first asset included and imported*
