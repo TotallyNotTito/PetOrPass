@@ -15,6 +15,8 @@ interface ImportMetaEnv {
 	readonly VITE_DB_NAME: string;
 	readonly VITE_AUTH0_DOMAIN: string;
 	readonly VITE_AUTH0_CLIENT_ID: string;
+	readonly VITE_MINIO_MICROSERVICE_IP: string;
+	readonly VITE_MINIO_MICROSERVICE_PORT: number;
 }
 
 interface ImportMeta {

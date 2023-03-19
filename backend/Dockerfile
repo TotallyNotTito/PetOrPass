@@ -29,6 +29,8 @@ ENV VITE_DB_PASS=password
 ENV VITE_DB_NAME=petorpass
 ENV VITE_AUTH0_DOMAIN=dev-aevxtb882nkyrbhe.us.auth0.com
 ENV VITE_AUTH0_CLIENT_ID=2PL4L35pgUAKOV485GFdluoLBAJY0NG8
+ENV VITE_MINIO_MICROSERVICE_IP=flask
+ENV VITE_MINIO_MICROSERVICE_PORT=3000
 
 # copy project definition/dependencies files, for better reuse of layers
 COPY --chown=nodejs:nodejs package*.json ./
