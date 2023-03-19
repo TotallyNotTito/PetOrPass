@@ -1,7 +1,6 @@
 FROM python:alpine
 
 RUN apk update && apk upgrade
-#    && apk add netcat
 
 COPY . /app
 
@@ -16,8 +15,6 @@ ENV MINIO_SECRET_KEY=minioPass
 ENV MINIO_BUCKET=petorpass
 
 RUN pip3 install -r requirements.txt
-
-#RUN while ! nc -z minio 9000; do sleep 5; done
 
 EXPOSE 3000
 
