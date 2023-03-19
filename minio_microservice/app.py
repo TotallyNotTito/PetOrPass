@@ -12,9 +12,14 @@ app = flask.Flask(__name__)
 
 @app.route("/store-image", methods=["POST"])
 def store_image():
-    print(request)
+    image_name = request.form["imageName"]
+    image_file = request.files["imageFile"]
+    image_file.save(image_name)
+
+
+
 #     TODO: send response object on success or failure, but needs to capture either state
     return {"temporary": "response"}
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT')))
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT")))
