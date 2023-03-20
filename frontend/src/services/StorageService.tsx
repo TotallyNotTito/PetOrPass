@@ -3,7 +3,7 @@ import {LocalStorageCache} from "@auth0/auth0-react";
 
 export const StorageProvider = ({children}) => {
 
-    const [localStorageCache, setLocalStorageCache] = useState(new LocalStorageCache());
+    let [localStorageCache, setLocalStorageCache] = useState(new LocalStorageCache());
 
     const useStorageContextPackage = {
         localStorageCache
